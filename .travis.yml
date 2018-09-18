@@ -1,0 +1,7 @@
+script:
+  - cd backend
+  - cd dinner-service
+  - mvn test -B
+
+language: java
+jdk: oraclejdk8
