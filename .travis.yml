@@ -1,7 +1,7 @@
 script:
   - cd backend
   - cd dinner-service
-  - mvn test -B
+  - mvn test -B -Dspring.profiles.active=travis
   
 services:
   - mysql
