@@ -37,4 +37,9 @@ public class DinnerController {
         return dinnerResultToResponse(result);
     }
 
+    @DeleteMapping("/{dinnerId}")
+    public void deleteDinner(@PathVariable String dinnerId) {
+        dinnerService.delete(dinnerId);
+    }
+
 }

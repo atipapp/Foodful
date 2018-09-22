@@ -55,6 +55,11 @@ public class DinnerService {
         return dinnerToDinnerResult(dinnerRepository.save(toUpdate));
     }
 
+    public void delete(String dinnerId) {
+        getByIdOrThrowException(dinnerId);
+        dinnerRepository.deleteById(dinnerId);
+    }
+
     private DinnerResult dinnerToDinnerResult(Dinner dinner) {
         return DinnerResult.builder()
                 .id(dinner.getId())
