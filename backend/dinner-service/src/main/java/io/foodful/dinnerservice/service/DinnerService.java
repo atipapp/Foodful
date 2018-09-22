@@ -6,6 +6,7 @@ import io.foodful.dinnerservice.errors.DinnerNotFoundException;
 import io.foodful.dinnerservice.repository.DinnerRepository;
 import io.foodful.dinnerservice.service.message.DinnerCreationMessage;
 import io.foodful.dinnerservice.service.message.DinnerResult;
+import io.foodful.dinnerservice.service.message.DinnerUpdateMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,9 +36,23 @@ public class DinnerService {
 
     public DinnerResult get(String dinnerId) {
         return dinnerToDinnerResult(
-                dinnerRepository.findById(dinnerId)
-                        .orElseThrow(DinnerNotFoundException::new)
+                getByIdOrThrowException(dinnerId)
         );
+    }
+
+    private Dinner getByIdOrThrowException(String dinnerId) {
+        return dinnerRepository.findById(dinnerId)
+                .orElseThrow(DinnerNotFoundException::new);
+    }
+
+    public DinnerResult update(DinnerUpdateMessage message) {
+        Dinner toUpdate = getByIdOrThrowException(message.dinnerId);
+
+        message.title.ifPresent(toUpdate::setTitle);
+        message.location.ifPresent(toUpdate::setLocation);
+        message.scheduledTime.ifPresent(toUpdate::setScheduledTime);
+
+        return dinnerToDinnerResult(dinnerRepository.save(toUpdate));
     }
 
     private DinnerResult dinnerToDinnerResult(Dinner dinner) {

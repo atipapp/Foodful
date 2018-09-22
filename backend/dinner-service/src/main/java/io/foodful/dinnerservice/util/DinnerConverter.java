@@ -1,9 +1,11 @@
 package io.foodful.dinnerservice.util;
 
-import io.foodful.dinnerservice.dto.DinnerCreationRequest;
+import io.foodful.dinnerservice.dto.DinnerCreateRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
+import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
 import io.foodful.dinnerservice.service.message.DinnerCreationMessage;
 import io.foodful.dinnerservice.service.message.DinnerResult;
+import io.foodful.dinnerservice.service.message.DinnerUpdateMessage;
 
 import java.time.OffsetDateTime;
 
@@ -13,12 +15,21 @@ public class DinnerConverter {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    public static DinnerCreationMessage dinnerCreationRequestToMessage(DinnerCreationRequest request) {
+    public static DinnerCreationMessage dinnerCreateRequestToMessage(DinnerCreateRequest request) {
         return DinnerCreationMessage.builder()
                 .title(request.title)
                 .location(request.location)
                 .scheduledTime(OffsetDateTime.parse(request.scheduledTime))
                 .guests(request.guests)
+                .build();
+    }
+
+    public static DinnerUpdateMessage dinnerUpdateRequestToMessage(String dinnerId, DinnerUpdateRequest request) {
+        return DinnerUpdateMessage.builder()
+                .dinnerId(dinnerId)
+                .title(request.title)
+                .location(request.location)
+                .scheduledTime(request.scheduledTime.map(OffsetDateTime::parse))
                 .build();
     }
 
