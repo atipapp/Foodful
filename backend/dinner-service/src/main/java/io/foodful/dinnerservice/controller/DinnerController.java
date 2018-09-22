@@ -1,13 +1,13 @@
 package io.foodful.dinnerservice.controller;
 
-import io.foodful.dinnerservice.dto.DinnerCreationRequest;
+import io.foodful.dinnerservice.dto.DinnerCreateRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
+import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
 import io.foodful.dinnerservice.service.DinnerService;
 import io.foodful.dinnerservice.service.message.DinnerResult;
 import org.springframework.web.bind.annotation.*;
 
-import static io.foodful.dinnerservice.util.DinnerConverter.dinnerCreationRequestToMessage;
-import static io.foodful.dinnerservice.util.DinnerConverter.dinnerResultToResponse;
+import static io.foodful.dinnerservice.util.DinnerConverter.*;
 
 @RestController
 @RequestMapping("/dinner")
@@ -20,8 +20,8 @@ public class DinnerController {
     }
 
     @PostMapping("")
-    public DinnerResponse createDinner(@RequestBody DinnerCreationRequest request) {
-        DinnerResult result = dinnerService.create(dinnerCreationRequestToMessage(request));
+    public DinnerResponse createDinner(@RequestBody DinnerCreateRequest request) {
+        DinnerResult result = dinnerService.create(dinnerCreateRequestToMessage(request));
         return dinnerResultToResponse(result);
     }
 
@@ -30,4 +30,11 @@ public class DinnerController {
         DinnerResult result = dinnerService.get(dinnerId);
         return dinnerResultToResponse(result);
     }
+
+    @PutMapping("/{dinnerId}")
+    public DinnerResponse updateDinner(@PathVariable String dinnerId, @RequestBody DinnerUpdateRequest request) {
+        DinnerResult result = dinnerService.update(dinnerUpdateRequestToMessage(dinnerId, request));
+        return dinnerResultToResponse(result);
+    }
+
 }

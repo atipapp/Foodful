@@ -1,8 +1,9 @@
 package io.foodful.dinnerservice.endpoint;
 
 import io.foodful.dinnerservice.DinnerServiceApplication;
-import io.foodful.dinnerservice.dto.DinnerCreationRequest;
+import io.foodful.dinnerservice.dto.DinnerCreateRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
+import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +38,7 @@ public class DinnerServiceIT {
 
     @Test
     void createDinnerTest() {
-        DinnerCreationRequest request = DinnerCreationRequest.builder()
+        DinnerCreateRequest request = DinnerCreateRequest.builder()
                 .title("My first dinner")
                 .location("D canteen")
                 .scheduledTime(OffsetDateTime.now().plusDays(1).toString())
@@ -66,6 +68,25 @@ public class DinnerServiceIT {
     }
 
     @Test
+    void updateDinnerTest() {
+        DinnerResponse beforeUpdate = withOneDinner();
+
+        DinnerUpdateRequest request = DinnerUpdateRequest.builder()
+                .title(Optional.of("Updated title"))
+                .location(Optional.of("Updated Location"))
+                .scheduledTime(Optional.of(OffsetDateTime.now().plusDays(1).toString()))
+                .build();
+
+        DinnerResponse afterUpdate = updateDinner(beforeUpdate.id, request);
+
+        assertNotNull(afterUpdate.id);
+        assertEquals(request.title.get(), afterUpdate.title);
+        assertEquals(request.location.get(), afterUpdate.location);
+        assertEquals(request.scheduledTime.get(), afterUpdate.scheduledTime);
+        assertTrue(beforeUpdate.guests.keySet().containsAll(afterUpdate.guests.keySet()));
+    }
+
+    @Test
     void getDinnerNotFound() {
         client.get().uri("/dinner/thisShouldNotBeFound")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -73,8 +94,22 @@ public class DinnerServiceIT {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    void updateDinnerNotFound() {
+        DinnerUpdateRequest request = DinnerUpdateRequest.builder()
+                .title(Optional.of("Not found updated title"))
+                .location(Optional.of("Not found updated Location"))
+                .scheduledTime(Optional.of(OffsetDateTime.now().plusDays(1).toString()))
+                .build();
+
+        client.put().uri("/dinner/thisShouldNotBeFound").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
     private DinnerResponse withOneDinner() {
-        DinnerCreationRequest request = DinnerCreationRequest.builder()
+        DinnerCreateRequest request = DinnerCreateRequest.builder()
                 .title(UUID.randomUUID().toString())
                 .location("Mock Location")
                 .scheduledTime(OffsetDateTime.now().plusDays(1).toString())
@@ -84,7 +119,7 @@ public class DinnerServiceIT {
         return createDinner(request);
     }
 
-    private DinnerResponse createDinner(DinnerCreationRequest request) {
+    private DinnerResponse createDinner(DinnerCreateRequest request) {
         return client.post().uri("/dinner").syncBody(request)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
@@ -96,6 +131,16 @@ public class DinnerServiceIT {
 
     private DinnerResponse getDinner(String dinnerId) {
         return client.get().uri("/dinner/" + dinnerId)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(DinnerResponse.class)
+                .returnResult().getResponseBody();
+    }
+
+    private DinnerResponse updateDinner(String dinnerId, DinnerUpdateRequest request) {
+        return client.put().uri("/dinner/" + dinnerId).syncBody(request)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()

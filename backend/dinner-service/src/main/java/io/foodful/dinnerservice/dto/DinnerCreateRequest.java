@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DinnerCreationRequest {
+public class DinnerCreateRequest {
 
     public String title;
     public String location;
