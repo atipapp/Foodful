@@ -2,6 +2,7 @@ package io.foodful.dinnerservice.service;
 
 import io.foodful.dinnerservice.domain.Dinner;
 import io.foodful.dinnerservice.domain.RSVP;
+import io.foodful.dinnerservice.errors.DinnerNotFoundException;
 import io.foodful.dinnerservice.repository.DinnerRepository;
 import io.foodful.dinnerservice.service.message.DinnerCreationMessage;
 import io.foodful.dinnerservice.service.message.DinnerResult;
@@ -30,6 +31,13 @@ public class DinnerService {
 
         dinner.getRsvps().forEach(rsvp -> rsvp.setDinner(dinner));
         return dinnerToDinnerResult(dinnerRepository.save(dinner));
+    }
+
+    public DinnerResult get(String dinnerId) {
+        return dinnerToDinnerResult(
+                dinnerRepository.findById(dinnerId)
+                        .orElseThrow(DinnerNotFoundException::new)
+        );
     }
 
     private DinnerResult dinnerToDinnerResult(Dinner dinner) {
