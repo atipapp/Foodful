@@ -87,6 +87,19 @@ public class DinnerServiceIT {
     }
 
     @Test
+    void deleteDinnerTest() {
+        DinnerResponse dinner = withOneDinner();
+
+        deleteDinner(dinner.id);
+
+        client.get().uri("/dinner/" + dinner.id)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+
+    @Test
     void getDinnerNotFound() {
         client.get().uri("/dinner/thisShouldNotBeFound")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -103,6 +116,14 @@ public class DinnerServiceIT {
                 .build();
 
         client.put().uri("/dinner/thisShouldNotBeFound").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void deleteDinnerNotFound() {
+        client.delete().uri("/dinner/thisShouldNotBeFound")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -147,6 +168,13 @@ public class DinnerServiceIT {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody(DinnerResponse.class)
                 .returnResult().getResponseBody();
+    }
+
+    private void deleteDinner(String dinnerId) {
+        client.delete().uri("/dinner/" + dinnerId)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk();
     }
 
 }
