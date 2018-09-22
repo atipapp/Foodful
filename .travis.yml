@@ -5,6 +5,9 @@ script:
   
 services:
   - mysql
+  
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS DinnerService;'
 
 language: java
 jdk: oraclejdk8
