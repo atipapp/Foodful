@@ -27,12 +27,13 @@ public class DinnerConverter {
                 .build();
     }
 
-    public static DinnerUpdateMessage dinnerUpdateRequestToMessage(String dinnerId, DinnerUpdateRequest request) {
+    public static DinnerUpdateMessage dinnerUpdateRequestToMessage(String dinnerId, DinnerUpdateRequest request, String userId) {
         return DinnerUpdateMessage.builder()
                 .dinnerId(dinnerId)
                 .title(request.title)
                 .location(request.location)
                 .scheduledTime(request.scheduledTime.map(OffsetDateTime::parse))
+                .userId(userId)
                 .build();
     }
 

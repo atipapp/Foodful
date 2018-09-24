@@ -35,7 +35,7 @@ public class DinnerController {
 
     @PutMapping("/{dinnerId}")
     public DinnerResponse updateDinner(@PathVariable String dinnerId, @RequestBody DinnerUpdateRequest request, @RequestAttribute AuthInfo authInfo) {
-        DinnerResult result = dinnerService.update(dinnerUpdateRequestToMessage(dinnerId, request));
+        DinnerResult result = dinnerService.update(dinnerUpdateRequestToMessage(dinnerId, request, authInfo.userId));
         return dinnerResultToResponse(result);
     }
 
