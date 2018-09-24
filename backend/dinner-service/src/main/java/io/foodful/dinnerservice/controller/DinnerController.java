@@ -41,7 +41,7 @@ public class DinnerController {
 
     @DeleteMapping("/{dinnerId}")
     public void deleteDinner(@PathVariable String dinnerId, @RequestAttribute AuthInfo authInfo) {
-        dinnerService.delete(dinnerId);
+        dinnerService.delete(dinnerId, authInfo.userId);
     }
 
     @PostMapping("/{dinnerId}/invite")

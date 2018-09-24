@@ -131,20 +131,33 @@ public class DinnerServiceIT {
                 .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
-                .expectStatus().isEqualTo(HttpStatus.FORBIDDEN);
+                .expectStatus().isForbidden();
     }
 
     @Test
     void deleteDinnerTest() {
         DinnerResponse dinner = withOneDinner();
 
-        deleteDinner(dinner.id);
+        deleteDinner(dinner.id, dinner.createdBy);
 
         client.get().uri("/dinner/" + dinner.id)
                 .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void deleteDinnerNotCreator() {
+        DinnerResponse dinner = withOneDinner();
+
+        client.delete().uri("/dinner/" + dinner.id)
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isForbidden();
+
+        getDinnerWithUserId(dinner.id, dinner.createdBy);
     }
 
 
@@ -263,9 +276,9 @@ public class DinnerServiceIT {
                 .returnResult().getResponseBody();
     }
 
-    private void deleteDinner(String dinnerId) {
+    private void deleteDinner(String dinnerId, String userId) {
         client.delete().uri("/dinner/" + dinnerId)
-                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(userId)))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk();
