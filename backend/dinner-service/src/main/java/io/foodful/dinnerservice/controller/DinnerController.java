@@ -1,6 +1,7 @@
 package io.foodful.dinnerservice.controller;
 
 import io.foodful.dinnerservice.dto.DinnerCreateRequest;
+import io.foodful.dinnerservice.dto.DinnerInviteRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
 import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
 import io.foodful.dinnerservice.service.DinnerService;
@@ -40,6 +41,12 @@ public class DinnerController {
     @DeleteMapping("/{dinnerId}")
     public void deleteDinner(@PathVariable String dinnerId) {
         dinnerService.delete(dinnerId);
+    }
+
+    @PostMapping("/{dinnerId}/invite")
+    public DinnerResponse inviteToDinner(@PathVariable String dinnerId, @RequestBody DinnerInviteRequest request) {
+        DinnerResult result = dinnerService.invite(dinnerInviteRequestToMessage(dinnerId, request));
+        return dinnerResultToResponse(result);
     }
 
 }

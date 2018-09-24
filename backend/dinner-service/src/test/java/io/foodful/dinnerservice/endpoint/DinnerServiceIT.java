@@ -3,6 +3,7 @@ package io.foodful.dinnerservice.endpoint;
 import io.foodful.commons.test.mock.MockAuthInfoJwtGenerator;
 import io.foodful.dinnerservice.DinnerServiceApplication;
 import io.foodful.dinnerservice.dto.DinnerCreateRequest;
+import io.foodful.dinnerservice.dto.DinnerInviteRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
 import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
 import io.foodful.commons.core.dto.AuthInfo;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -135,6 +137,32 @@ public class DinnerServiceIT {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    void inviteUser() {
+        DinnerResponse dinner = withOneDinner();
+        DinnerInviteRequest request = DinnerInviteRequest.builder()
+                .userId(UUID.randomUUID().toString())
+                .build();
+
+        DinnerResponse response = inviteToDinner(dinner.id, request);
+        assertTrue(response.guests.containsKey(request.userId));
+    }
+
+    @Test
+    void inviteUserAlreadyInvitedThrowsException() {
+        DinnerResponse dinner = withOneDinner();
+        DinnerInviteRequest request = DinnerInviteRequest.builder()
+                .userId(UUID.randomUUID().toString())
+                .build();
+
+        inviteToDinner(dinner.id, request);
+
+        client.post().uri("/dinner/" + dinner.id + "/invite").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     private DinnerResponse withOneDinner() {
         DinnerCreateRequest request = DinnerCreateRequest.builder()
                 .title(UUID.randomUUID().toString())
@@ -149,6 +177,16 @@ public class DinnerServiceIT {
     private DinnerResponse createDinner(DinnerCreateRequest request) {
         return client.post().uri("/dinner").syncBody(request)
                 .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(DinnerResponse.class)
+                .returnResult().getResponseBody();
+    }
+
+    private DinnerResponse inviteToDinner(String dinnerId, DinnerInviteRequest request) {
+        return client.post().uri("/dinner/" + dinnerId + "/invite").syncBody(request)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()

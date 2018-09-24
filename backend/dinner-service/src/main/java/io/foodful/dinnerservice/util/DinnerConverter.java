@@ -1,9 +1,11 @@
 package io.foodful.dinnerservice.util;
 
 import io.foodful.dinnerservice.dto.DinnerCreateRequest;
+import io.foodful.dinnerservice.dto.DinnerInviteRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
 import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
 import io.foodful.dinnerservice.service.message.DinnerCreationMessage;
+import io.foodful.dinnerservice.service.message.DinnerInviteMessage;
 import io.foodful.dinnerservice.service.message.DinnerResult;
 import io.foodful.dinnerservice.service.message.DinnerUpdateMessage;
 
@@ -30,6 +32,13 @@ public class DinnerConverter {
                 .title(request.title)
                 .location(request.location)
                 .scheduledTime(request.scheduledTime.map(OffsetDateTime::parse))
+                .build();
+    }
+
+    public static DinnerInviteMessage dinnerInviteRequestToMessage(String dinnerId, DinnerInviteRequest request) {
+        return DinnerInviteMessage.builder()
+                .dinnerId(dinnerId)
+                .userId(request.userId)
                 .build();
     }
 

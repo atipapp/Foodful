@@ -3,8 +3,10 @@ package io.foodful.dinnerservice.service;
 import io.foodful.dinnerservice.domain.Dinner;
 import io.foodful.dinnerservice.domain.RSVP;
 import io.foodful.dinnerservice.errors.DinnerNotFoundException;
+import io.foodful.dinnerservice.errors.UserAlreadyInvitedException;
 import io.foodful.dinnerservice.repository.DinnerRepository;
 import io.foodful.dinnerservice.service.message.DinnerCreationMessage;
+import io.foodful.dinnerservice.service.message.DinnerInviteMessage;
 import io.foodful.dinnerservice.service.message.DinnerResult;
 import io.foodful.dinnerservice.service.message.DinnerUpdateMessage;
 import org.springframework.stereotype.Service;
@@ -58,6 +60,24 @@ public class DinnerService {
     public void delete(String dinnerId) {
         getByIdOrThrowException(dinnerId);
         dinnerRepository.deleteById(dinnerId);
+    }
+
+
+    public DinnerResult invite(DinnerInviteMessage message) {
+        Dinner dinner = getByIdOrThrowException(message.dinnerId);
+
+        if (isUserInvitedToDinner(message.userId, dinner)) {
+            throw new UserAlreadyInvitedException();
+        } else {
+            RSVP rsvp = createRsvpFromString(message.userId);
+            rsvp.setDinner(dinner);
+            dinner.getRsvps().add(rsvp);
+            return dinnerToDinnerResult(dinnerRepository.save(dinner));
+        }
+    }
+
+    private boolean isUserInvitedToDinner(String userId, Dinner dinnerToInviteTo) {
+        return dinnerToInviteTo.getRsvps().stream().anyMatch(rsvp -> rsvp.getUserId().equals(userId));
     }
 
     private DinnerResult dinnerToDinnerResult(Dinner dinner) {
