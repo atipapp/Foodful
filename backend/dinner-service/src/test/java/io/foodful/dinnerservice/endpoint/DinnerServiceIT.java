@@ -76,6 +76,7 @@ public class DinnerServiceIT {
         assertEquals(expected.location, response.location);
         assertTrue(Duration.between(OffsetDateTime.parse(expected.scheduledTime), OffsetDateTime.parse(response.scheduledTime)).getSeconds() <= 1);
         assertTrue(expected.guests.keySet().containsAll(response.guests.keySet()));
+        assertEquals(expected.createdBy, response.createdBy);
     }
 
     @Test
@@ -95,6 +96,7 @@ public class DinnerServiceIT {
         assertEquals(request.location.get(), afterUpdate.location);
         assertEquals(request.scheduledTime.get(), afterUpdate.scheduledTime);
         assertTrue(beforeUpdate.guests.keySet().containsAll(afterUpdate.guests.keySet()));
+        assertEquals(beforeUpdate.createdBy, afterUpdate.createdBy);
     }
 
     @Test
