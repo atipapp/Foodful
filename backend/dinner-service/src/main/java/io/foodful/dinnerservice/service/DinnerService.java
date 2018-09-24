@@ -37,10 +37,19 @@ public class DinnerService {
         return dinnerToDinnerResult(dinnerRepository.save(dinner));
     }
 
-    public DinnerResult get(String dinnerId) {
-        return dinnerToDinnerResult(
-                getByIdOrThrowException(dinnerId)
-        );
+    public DinnerResult get(String dinnerId, String principalUserId) {
+        Dinner dinner = getByIdOrThrowException(dinnerId);
+
+        if (isCreatorOrAttendeeOfTheDinner(principalUserId, dinner)) {
+            return dinnerToDinnerResult(dinner);
+        } else {
+            throw new DinnerNotFoundException();
+        }
+    }
+
+    private boolean isCreatorOrAttendeeOfTheDinner(String principalUserId, Dinner dinner) {
+        return dinner.getCreatedBy().equals(principalUserId) ||
+                dinner.getRsvps().stream().anyMatch(rsvp -> rsvp.getUserId().equals(principalUserId));
     }
 
     private Dinner getByIdOrThrowException(String dinnerId) {
