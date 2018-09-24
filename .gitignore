@@ -59,3 +59,6 @@ hs_err_pid*
 /dist/
 /nbdist/
 /.nb-gradle/
+
+backend/commons/commons-core/target/maven-status/maven-compiler-plugin/
+backend/commons/commons-core/target/maven-status/maven-compiler-plugin/
