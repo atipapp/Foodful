@@ -30,6 +30,7 @@ public class DinnerService {
                 .comments(new ArrayList<>())
                 .rsvps(message.guests.stream().map(this::createRsvpFromString).collect(Collectors.toList()))
                 .scheduledTime(message.scheduledTime)
+                .createdBy(message.userId)
                 .build();
 
         dinner.getRsvps().forEach(rsvp -> rsvp.setDinner(dinner));
@@ -97,6 +98,7 @@ public class DinnerService {
                         rsvp -> rsvp.getStatus().name())))
                 .location(dinner.getLocation())
                 .scheduledTime(dinner.getScheduledTime().toString())
+                .createdBy(dinner.getCreatedBy())
                 .build();
     }
 

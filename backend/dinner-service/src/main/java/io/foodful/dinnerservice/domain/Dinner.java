@@ -28,4 +28,6 @@ public class Dinner extends BaseEntity {
     @OneToMany(mappedBy = "dinner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
+    private String createdBy;
+
 }
