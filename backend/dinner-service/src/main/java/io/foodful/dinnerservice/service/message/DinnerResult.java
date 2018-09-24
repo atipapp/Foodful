@@ -16,5 +16,6 @@ public class DinnerResult {
     public String location;
     public String scheduledTime;
     public Map<String, String> guests;
+    public String createdBy;
 
 }

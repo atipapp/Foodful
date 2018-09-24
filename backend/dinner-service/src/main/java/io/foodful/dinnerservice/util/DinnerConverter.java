@@ -17,12 +17,13 @@ public class DinnerConverter {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    public static DinnerCreationMessage dinnerCreateRequestToMessage(DinnerCreateRequest request) {
+    public static DinnerCreationMessage dinnerCreateRequestToMessage(DinnerCreateRequest request, String userId) {
         return DinnerCreationMessage.builder()
                 .title(request.title)
                 .location(request.location)
                 .scheduledTime(OffsetDateTime.parse(request.scheduledTime))
                 .guests(request.guests)
+                .userId(userId)
                 .build();
     }
 
@@ -49,6 +50,7 @@ public class DinnerConverter {
                 .scheduledTime(result.scheduledTime)
                 .title(result.title)
                 .guests(result.guests)
+                .createdBy(result.createdBy)
                 .build();
     }
 

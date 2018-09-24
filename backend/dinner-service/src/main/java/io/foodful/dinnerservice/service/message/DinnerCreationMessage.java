@@ -16,5 +16,6 @@ public class DinnerCreationMessage {
     public String location;
     public OffsetDateTime scheduledTime;
     public List<String> guests;
+    public String userId;
 
 }
