@@ -1,12 +1,15 @@
 package io.foodful.dinnerservice.endpoint;
 
+import io.foodful.commons.test.mock.MockAuthInfoJwtGenerator;
 import io.foodful.dinnerservice.DinnerServiceApplication;
 import io.foodful.dinnerservice.dto.DinnerCreateRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
 import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
+import io.foodful.dto.AuthInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
@@ -25,6 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = DinnerServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 public class DinnerServiceIT {
+
+    @Autowired
+    private MockAuthInfoJwtGenerator mockAuthInfoJwtGenerator;
 
     @LocalServerPort
     private int randomServerPort;
@@ -142,6 +148,7 @@ public class DinnerServiceIT {
 
     private DinnerResponse createDinner(DinnerCreateRequest request) {
         return client.post().uri("/dinner").syncBody(request)
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
@@ -152,6 +159,7 @@ public class DinnerServiceIT {
 
     private DinnerResponse getDinner(String dinnerId) {
         return client.get().uri("/dinner/" + dinnerId)
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
@@ -162,6 +170,7 @@ public class DinnerServiceIT {
 
     private DinnerResponse updateDinner(String dinnerId, DinnerUpdateRequest request) {
         return client.put().uri("/dinner/" + dinnerId).syncBody(request)
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
@@ -172,9 +181,16 @@ public class DinnerServiceIT {
 
     private void deleteDinner(String dinnerId) {
         client.delete().uri("/dinner/" + dinnerId)
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk();
+    }
+
+    protected AuthInfo getMockAuthInfo(String userId) {
+        AuthInfo authInfo = new AuthInfo();
+        authInfo.userId = userId;
+        return authInfo;
     }
 
 }
