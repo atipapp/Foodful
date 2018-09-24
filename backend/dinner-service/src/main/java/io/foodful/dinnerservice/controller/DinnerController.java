@@ -29,7 +29,7 @@ public class DinnerController {
 
     @GetMapping("/{dinnerId}")
     public DinnerResponse getDinner(@PathVariable String dinnerId, @RequestAttribute AuthInfo authInfo) {
-        DinnerResult result = dinnerService.get(dinnerId);
+        DinnerResult result = dinnerService.get(dinnerId, authInfo.userId);
         return dinnerResultToResponse(result);
     }
 
