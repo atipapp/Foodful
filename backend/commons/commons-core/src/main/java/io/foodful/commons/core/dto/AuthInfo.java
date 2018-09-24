@@ -1,4 +1,4 @@
-package io.foodful.dto;
+package io.foodful.commons.core.dto;
 
 public class AuthInfo {
 

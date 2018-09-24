@@ -1,6 +1,6 @@
 package io.foodful.commons.test.mock;
 
-import io.foodful.dto.AuthInfo;
+import io.foodful.commons.core.dto.AuthInfo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;

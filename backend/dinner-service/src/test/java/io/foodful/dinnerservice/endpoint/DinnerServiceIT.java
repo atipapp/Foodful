@@ -5,7 +5,7 @@ import io.foodful.dinnerservice.DinnerServiceApplication;
 import io.foodful.dinnerservice.dto.DinnerCreateRequest;
 import io.foodful.dinnerservice.dto.DinnerResponse;
 import io.foodful.dinnerservice.dto.DinnerUpdateRequest;
-import io.foodful.dto.AuthInfo;
+import io.foodful.commons.core.dto.AuthInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,4 +1,4 @@
-package io.foodful.interceptors;
+package io.foodful.commons.core.interceptors;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

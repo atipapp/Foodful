@@ -1,4 +1,4 @@
-package io.foodful.feign.interceptors;
+package io.foodful.commons.core.interceptors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

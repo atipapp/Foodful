@@ -1,6 +1,6 @@
-package io.foodful.configuration;
+package io.foodful.commons.core.configuration;
 
-import io.foodful.interceptors.UserSecurityFilter;
+import io.foodful.commons.core.interceptors.UserSecurityFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
