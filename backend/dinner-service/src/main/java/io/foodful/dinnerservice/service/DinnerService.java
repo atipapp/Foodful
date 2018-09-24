@@ -76,6 +76,14 @@ public class DinnerService {
         }
     }
 
+    public DinnerResult unInvite(DinnerInviteMessage message) {
+        Dinner dinner = getByIdOrThrowException(message.dinnerId);
+
+        dinner.getRsvps().removeIf(rsvp -> rsvp.getUserId().equals(message.userId));
+
+        return dinnerToDinnerResult(dinnerRepository.save(dinner));
+    }
+
     private boolean isUserInvitedToDinner(String userId, Dinner dinnerToInviteTo) {
         return dinnerToInviteTo.getRsvps().stream().anyMatch(rsvp -> rsvp.getUserId().equals(userId));
     }
