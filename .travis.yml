@@ -1,6 +1,5 @@
 script:
   - cd backend
-  - cd dinner-service
   - mvn verify -Dspring.profiles.active=travis -Dspring.output.ansi.enabled=always
   
 services:
