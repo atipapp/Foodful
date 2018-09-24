@@ -1,6 +1,6 @@
-package io.foodful.interceptors;
+package io.foodful.commons.core.interceptors;
 
-import io.foodful.dto.AuthInfo;
+import io.foodful.commons.core.dto.AuthInfo;
 import io.jsonwebtoken.Jwts;
 import org.springframework.web.servlet.HandlerInterceptor;
 

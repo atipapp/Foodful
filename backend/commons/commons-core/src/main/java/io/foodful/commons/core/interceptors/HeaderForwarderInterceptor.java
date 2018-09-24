@@ -1,4 +1,4 @@
-package io.foodful.feign.interceptors;
+package io.foodful.commons.core.interceptors;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
