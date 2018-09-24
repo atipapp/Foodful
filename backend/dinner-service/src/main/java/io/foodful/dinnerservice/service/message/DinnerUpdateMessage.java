@@ -16,5 +16,6 @@ public class DinnerUpdateMessage {
     public Optional<String> title;
     public Optional<String> location;
     public Optional<OffsetDateTime> scheduledTime;
+    public String userId;
 
 }

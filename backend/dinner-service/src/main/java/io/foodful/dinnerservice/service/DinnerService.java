@@ -9,6 +9,7 @@ import io.foodful.dinnerservice.service.message.DinnerCreationMessage;
 import io.foodful.dinnerservice.service.message.DinnerInviteMessage;
 import io.foodful.dinnerservice.service.message.DinnerResult;
 import io.foodful.dinnerservice.service.message.DinnerUpdateMessage;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -60,11 +61,16 @@ public class DinnerService {
     public DinnerResult update(DinnerUpdateMessage message) {
         Dinner toUpdate = getByIdOrThrowException(message.dinnerId);
 
-        message.title.ifPresent(toUpdate::setTitle);
-        message.location.ifPresent(toUpdate::setLocation);
-        message.scheduledTime.ifPresent(toUpdate::setScheduledTime);
+        if (toUpdate.getCreatedBy().equals(message.userId)){
+            message.title.ifPresent(toUpdate::setTitle);
+            message.location.ifPresent(toUpdate::setLocation);
+            message.scheduledTime.ifPresent(toUpdate::setScheduledTime);
 
-        return dinnerToDinnerResult(dinnerRepository.save(toUpdate));
+            return dinnerToDinnerResult(dinnerRepository.save(toUpdate));
+
+        } else {
+            throw new AccessDeniedException("Can not modify this dinner");
+        }
     }
 
     public void delete(String dinnerId) {

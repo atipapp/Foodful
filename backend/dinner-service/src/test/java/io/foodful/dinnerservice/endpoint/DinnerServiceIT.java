@@ -107,7 +107,7 @@ public class DinnerServiceIT {
                 .scheduledTime(Optional.of(OffsetDateTime.now().plusDays(1).toString()))
                 .build();
 
-        DinnerResponse afterUpdate = updateDinner(beforeUpdate.id, request);
+        DinnerResponse afterUpdate = updateDinner(beforeUpdate.id, request, beforeUpdate.createdBy);
 
         assertNotNull(afterUpdate.id);
         assertEquals(request.title.get(), afterUpdate.title);
@@ -115,6 +115,23 @@ public class DinnerServiceIT {
         assertEquals(request.scheduledTime.get(), afterUpdate.scheduledTime);
         assertTrue(beforeUpdate.guests.keySet().containsAll(afterUpdate.guests.keySet()));
         assertEquals(beforeUpdate.createdBy, afterUpdate.createdBy);
+    }
+
+    @Test
+    void updateDinnerNotCreator() {
+        DinnerUpdateRequest request = DinnerUpdateRequest.builder()
+                .title(Optional.of("Not found updated title"))
+                .location(Optional.of("Not found updated Location"))
+                .scheduledTime(Optional.of(OffsetDateTime.now().plusDays(1).toString()))
+                .build();
+
+        DinnerResponse dinner = withOneDinner();
+
+        client.put().uri("/dinner/" + dinner.id).syncBody(request)
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.FORBIDDEN);
     }
 
     @Test
@@ -235,9 +252,9 @@ public class DinnerServiceIT {
                 .returnResult().getResponseBody();
     }
 
-    private DinnerResponse updateDinner(String dinnerId, DinnerUpdateRequest request) {
+    private DinnerResponse updateDinner(String dinnerId, DinnerUpdateRequest request, String userId) {
         return client.put().uri("/dinner/" + dinnerId).syncBody(request)
-                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(userId)))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
