@@ -37,10 +37,11 @@ public class DinnerConverter {
                 .build();
     }
 
-    public static DinnerInviteMessage dinnerInviteRequestToMessage(String dinnerId, DinnerInviteRequest request) {
+    public static DinnerInviteMessage dinnerInviteRequestToMessage(String dinnerId, DinnerInviteRequest request, String principalUserId) {
         return DinnerInviteMessage.builder()
                 .dinnerId(dinnerId)
-                .userId(request.userId)
+                .invitedUserId(request.userId)
+                .principalUserId(principalUserId)
                 .build();
     }
 

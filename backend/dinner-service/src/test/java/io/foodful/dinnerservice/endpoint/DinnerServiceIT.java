@@ -87,14 +87,14 @@ public class DinnerServiceIT {
     }
 
     @Test
-    void getDinnerNotAttendeeThrowsNotFound() {
+    void getDinnerNotAttendeeThrowsForbidden() {
         DinnerResponse dinner = withOneDinner();
 
         client.get().uri("/dinner/" + dinner.id)
                 .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
-                .expectStatus().isNotFound();
+                .expectStatus().isForbidden();
     }
 
     @Test
@@ -201,7 +201,7 @@ public class DinnerServiceIT {
                 .userId(UUID.randomUUID().toString())
                 .build();
 
-        DinnerResponse response = inviteToDinner(dinner.id, request, UUID.randomUUID().toString());
+        DinnerResponse response = inviteToDinner(dinner.id, request, dinner.createdBy);
         assertTrue(response.guests.containsKey(request.userId));
     }
 
@@ -212,10 +212,10 @@ public class DinnerServiceIT {
                 .userId(UUID.randomUUID().toString())
                 .build();
 
-        inviteToDinner(dinner.id, request, UUID.randomUUID().toString());
+        inviteToDinner(dinner.id, request, dinner.createdBy);
 
         client.post().uri("/dinner/" + dinner.id + "/invite").syncBody(request)
-                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(UUID.randomUUID().toString())))
+                .header(mockAuthInfoJwtGenerator.getHeaderName(), mockAuthInfoJwtGenerator.getMockJwtWithUserRole(getMockAuthInfo(dinner.createdBy)))
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);

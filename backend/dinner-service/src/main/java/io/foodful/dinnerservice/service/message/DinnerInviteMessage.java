@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class DinnerInviteMessage {
 
     public String dinnerId;
-    public String userId;
+    public String invitedUserId;
+    public String principalUserId;
 
 }

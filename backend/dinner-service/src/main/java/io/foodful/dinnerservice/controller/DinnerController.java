@@ -46,7 +46,7 @@ public class DinnerController {
 
     @PostMapping("/{dinnerId}/invite")
     public DinnerResponse inviteToDinner(@PathVariable String dinnerId, @RequestBody DinnerInviteRequest request, @RequestAttribute AuthInfo authInfo) {
-        DinnerResult result = dinnerService.invite(dinnerInviteRequestToMessage(dinnerId, request));
+        DinnerResult result = dinnerService.invite(dinnerInviteRequestToMessage(dinnerId, request, authInfo.userId));
         return dinnerResultToResponse(result);
     }
 
