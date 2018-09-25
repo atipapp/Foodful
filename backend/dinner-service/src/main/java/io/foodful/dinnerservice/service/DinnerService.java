@@ -9,7 +9,7 @@ import io.foodful.dinnerservice.service.message.DinnerCreationMessage;
 import io.foodful.dinnerservice.service.message.DinnerInviteMessage;
 import io.foodful.dinnerservice.service.message.DinnerResult;
 import io.foodful.dinnerservice.service.message.DinnerUpdateMessage;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,19 +38,11 @@ public class DinnerService {
         return dinnerToDinnerResult(dinnerRepository.save(dinner));
     }
 
+    @PreAuthorize("@dinnerSecurityService.isAttendeeOfTheDinner(#dinnerId, #principalUserId)")
     public DinnerResult get(String dinnerId, String principalUserId) {
         Dinner dinner = getByIdOrThrowException(dinnerId);
 
-        if (isCreatorOrAttendeeOfTheDinner(principalUserId, dinner)) {
-            return dinnerToDinnerResult(dinner);
-        } else {
-            throw new DinnerNotFoundException();
-        }
-    }
-
-    private boolean isCreatorOrAttendeeOfTheDinner(String principalUserId, Dinner dinner) {
-        return isCreatorTheSameAsPrincipal(principalUserId, dinner.getCreatedBy()) ||
-                dinner.getRsvps().stream().anyMatch(rsvp -> isCreatorTheSameAsPrincipal(principalUserId, rsvp.getUserId()));
+        return dinnerToDinnerResult(dinner);
     }
 
     private Dinner getByIdOrThrowException(String dinnerId) {
@@ -58,43 +50,30 @@ public class DinnerService {
                 .orElseThrow(DinnerNotFoundException::new);
     }
 
+    @PreAuthorize("@dinnerSecurityService.isCreatorOfTheDinner(#message.dinnerId, #message.principalUserId)")
     public DinnerResult update(DinnerUpdateMessage message) {
         Dinner toUpdate = getByIdOrThrowException(message.dinnerId);
 
-        if (isCreatorTheSameAsPrincipal(message.userId, toUpdate.getCreatedBy())){
-            message.title.ifPresent(toUpdate::setTitle);
-            message.location.ifPresent(toUpdate::setLocation);
-            message.scheduledTime.ifPresent(toUpdate::setScheduledTime);
+        message.title.ifPresent(toUpdate::setTitle);
+        message.location.ifPresent(toUpdate::setLocation);
+        message.scheduledTime.ifPresent(toUpdate::setScheduledTime);
 
-            return dinnerToDinnerResult(dinnerRepository.save(toUpdate));
-
-        } else {
-            throw new AccessDeniedException("Can not modify this dinner");
-        }
+        return dinnerToDinnerResult(dinnerRepository.save(toUpdate));
     }
 
-    public void delete(String dinnerId, String userId) {
-        Dinner dinner = getByIdOrThrowException(dinnerId);
-
-        if (isCreatorTheSameAsPrincipal(userId, dinner.getCreatedBy())){
-            dinnerRepository.deleteById(dinnerId);
-        } else {
-            throw new AccessDeniedException("Can not delete this dinner");
-        }
+    @PreAuthorize("@dinnerSecurityService.isCreatorOfTheDinner(#dinnerId, #principalUserId)")
+    public void delete(String dinnerId, String principalUserId) {
+        dinnerRepository.deleteById(dinnerId);
     }
 
-    private boolean isCreatorTheSameAsPrincipal(String userId, String createdBy) {
-        return createdBy.equals(userId);
-    }
-
-
+    @PreAuthorize("@dinnerSecurityService.isAttendeeOfTheDinner(#message.dinnerId, #message.principalUserId)")
     public DinnerResult invite(DinnerInviteMessage message) {
         Dinner dinner = getByIdOrThrowException(message.dinnerId);
 
-        if (isUserInvitedToDinner(message.userId, dinner)) {
+        if (isUserInvitedToDinner(message.invitedUserId, dinner)) {
             throw new UserAlreadyInvitedException();
         } else {
-            RSVP rsvp = createRsvpFromString(message.userId);
+            RSVP rsvp = createRsvpFromString(message.invitedUserId);
             rsvp.setDinner(dinner);
             dinner.getRsvps().add(rsvp);
             return dinnerToDinnerResult(dinnerRepository.save(dinner));
@@ -102,7 +81,7 @@ public class DinnerService {
     }
 
     private boolean isUserInvitedToDinner(String userId, Dinner dinnerToInviteTo) {
-        return dinnerToInviteTo.getRsvps().stream().anyMatch(rsvp -> isCreatorTheSameAsPrincipal(userId, rsvp.getUserId()));
+        return dinnerToInviteTo.getRsvps().stream().anyMatch(rsvp -> userId.equals(rsvp.getUserId()));
     }
 
     private DinnerResult dinnerToDinnerResult(Dinner dinner) {
