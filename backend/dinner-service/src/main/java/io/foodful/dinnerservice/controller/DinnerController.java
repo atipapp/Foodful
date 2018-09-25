@@ -50,10 +50,4 @@ public class DinnerController {
         return dinnerResultToResponse(result);
     }
 
-    @DeleteMapping("/{dinnerId}/invite")
-    public DinnerResponse uninviteFromDinner(@PathVariable String dinnerId, @RequestBody DinnerInviteRequest request, @RequestAttribute AuthInfo authInfo) {
-        DinnerResult result = dinnerService.unInvite(dinnerInviteRequestToMessage(dinnerId, request));
-        return dinnerResultToResponse(result);
-    }
-
 }
