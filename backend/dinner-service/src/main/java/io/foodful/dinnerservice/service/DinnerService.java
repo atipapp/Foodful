@@ -101,14 +101,6 @@ public class DinnerService {
         }
     }
 
-    public DinnerResult unInvite(DinnerInviteMessage message) {
-        Dinner dinner = getByIdOrThrowException(message.dinnerId);
-
-        dinner.getRsvps().removeIf(rsvp -> isCreatorTheSameAsPrincipal(message.userId, rsvp.getUserId()));
-
-        return dinnerToDinnerResult(dinnerRepository.save(dinner));
-    }
-
     private boolean isUserInvitedToDinner(String userId, Dinner dinnerToInviteTo) {
         return dinnerToInviteTo.getRsvps().stream().anyMatch(rsvp -> isCreatorTheSameAsPrincipal(userId, rsvp.getUserId()));
     }
