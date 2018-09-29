@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
@@ -18,6 +19,7 @@ import java.time.OffsetDateTime;
 public class Token {
 
     @Id
+    @Column(length = 50)
     private String value;
 
     private OffsetDateTime expirationDate;
