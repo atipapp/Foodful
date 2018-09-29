@@ -29,6 +29,7 @@
     
     <modules>
         <module>dinner-service</module>
+        <module>auth-service</module>
         <module>commons</module>
     </modules>
 
