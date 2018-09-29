@@ -42,7 +42,7 @@ public class TokenService {
     }
 
     @Transactional
-    public TokenResult createTokensForUser(String userId) {
+    public TokenResult create(String userId) {
         AccessToken accessToken = createAccessTokenForUser(userId);
         accessToken = accessTokenRepository.save(accessToken);
 
@@ -65,7 +65,7 @@ public class TokenService {
         }
         String userId = refreshToken.getUserId();
         invalidateAccessToken(refreshToken.getAccessToken().getValue());
-        return createTokensForUser(userId);
+        return create(userId);
     }
 
     private AccessToken createAccessTokenForUser(String userId) {

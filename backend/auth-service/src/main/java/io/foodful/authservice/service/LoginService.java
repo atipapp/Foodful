@@ -46,7 +46,7 @@ public class LoginService {
         getUserInfoFromFacebook(facebookAccessToken);
         // TODO: call to user-service, which returns a userId
 
-        return tokenResultToLoginResult(tokenService.createTokensForUser("MockUserId" + UUID.randomUUID().toString()));
+        return tokenResultToLoginResult(tokenService.create("MockUserId" + UUID.randomUUID().toString()));
     }
 
     private void getUserInfoFromFacebook(FacebookAccessTokenResponse token) {
