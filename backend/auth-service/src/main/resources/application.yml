@@ -16,6 +16,13 @@ foodful:
     user-data-header: X-Foodful-User
     jwt:
       key: 3jfef4e2e7cb44b2893169cd7c276824
+    token:
+      access:
+        length: 50
+        expires-in-minutes: 5
+      refresh:
+        length: 50
+        expires-in-hours: 720
     social:
       facebook:
         url: https://graph.facebook.com/v3.1
