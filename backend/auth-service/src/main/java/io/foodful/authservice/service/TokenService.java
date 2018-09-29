@@ -2,12 +2,15 @@ package io.foodful.authservice.service;
 
 import io.foodful.authservice.domain.AccessToken;
 import io.foodful.authservice.domain.RefreshToken;
+import io.foodful.authservice.domain.Token;
+import io.foodful.authservice.error.InvalidTokenException;
 import io.foodful.authservice.repository.AccessTokenRepository;
 import io.foodful.authservice.repository.RefreshTokenRepository;
 import io.foodful.authservice.service.message.TokenResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
@@ -38,6 +41,7 @@ public class TokenService {
         this.refreshTokenExpiresInHours = refreshTokenExpiresInHours;
     }
 
+    @Transactional
     public TokenResult createTokensForUser(String userId) {
         AccessToken accessToken = this.createAccessTokenForUser(userId);
         accessToken = this.accessTokenRepository.save(accessToken);
@@ -53,9 +57,20 @@ public class TokenService {
                 .build();
     }
 
+    @Transactional
+    public TokenResult renew(String refreshTokenId) {
+        RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenId).orElse(null);
+        if (refreshToken == null || !this.checkTokenValidity(refreshToken)) {
+            throw new InvalidTokenException();
+        }
+        String userId = refreshToken.getUserId();
+        this.invalidateAccessToken(refreshToken.getAccessToken().getValue());
+        return this.createTokensForUser(userId);
+    }
+
     private AccessToken createAccessTokenForUser(String userId) {
         AccessToken accessToken = new AccessToken();
-        accessToken.setValue(generateRandomToken(this.accessTokenLength));
+        accessToken.setValue(generateRandomToken(accessTokenLength));
         accessToken.setExpirationDate(OffsetDateTime.now().plusMinutes(accessTokenExpiresInMinutes));
         accessToken.setUserId(userId);
         return accessToken;
@@ -70,9 +85,18 @@ public class TokenService {
         return refreshToken;
     }
 
+    private void invalidateAccessToken(String accessToken) {
+        this.refreshTokenRepository.deleteByAccessToken_Value(accessToken);
+        this.accessTokenRepository.deleteById(accessToken);
+    }
+
     private String generateRandomToken(int length) {
         return RandomStringUtils.random(length, 0, 0,
                 true, true, null, new SecureRandom());
+    }
+
+    private boolean checkTokenValidity(Token token) {
+        return OffsetDateTime.now().isBefore(token.getExpirationDate());
     }
 
 }
