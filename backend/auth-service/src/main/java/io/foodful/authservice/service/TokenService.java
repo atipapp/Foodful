@@ -29,7 +29,7 @@ public class TokenService {
                         @Value("${foodful.auth.token.access.length}") int accessTokenLength,
                         @Value("${foodful.auth.token.access.expires-in-minutes}") int accessTokenExpiresInMinutes,
                         @Value("${foodful.auth.token.refresh.length}") int refreshTokenLength,
-                        @Value("${foodful.auth.token.access.expires-in-hours}") int refreshTokenExpiresInHours) {
+                        @Value("${foodful.auth.token.refresh.expires-in-hours}") int refreshTokenExpiresInHours) {
         this.accessTokenRepository = accessTokenRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.accessTokenLength = accessTokenLength;

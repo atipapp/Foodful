@@ -17,6 +17,6 @@ public class FacebookAccessTokenResponse {
     public String tokenType;
 
     @JsonProperty("expires_in")
-    public String expiresInSeconds;
+    public int expiresInSeconds;
 
 }
