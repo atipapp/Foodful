@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TokenService {
@@ -66,6 +68,18 @@ public class TokenService {
         String userId = refreshToken.getUserId();
         invalidateAccessToken(refreshToken.getAccessToken().getValue());
         return create(userId);
+    }
+
+    @Transactional
+    public void cleanExpiredTokens() {
+        List<AccessToken> expiredAccessTokens = new ArrayList<>();
+        List<RefreshToken> expiredRefreshTokens =
+                refreshTokenRepository.findRefreshTokenByExpirationDateBefore(OffsetDateTime.now());
+
+        expiredRefreshTokens.forEach(token -> expiredAccessTokens.add(token.getAccessToken()));
+
+        refreshTokenRepository.deleteAll(expiredRefreshTokens);
+        accessTokenRepository.deleteAll(expiredAccessTokens);
     }
 
     private AccessToken createAccessTokenForUser(String userId) {

@@ -23,6 +23,7 @@ foodful:
       refresh:
         length: 50
         expires-in-hours: 720
+      cleanup-frequency-in-minutes: 10
     social:
       facebook:
         url: https://graph.facebook.com/v3.1
