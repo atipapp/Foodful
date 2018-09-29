@@ -2,7 +2,9 @@ package io.foodful.authservice.util;
 
 import io.foodful.authservice.dto.LoginRequest;
 import io.foodful.authservice.dto.TokenResponse;
+import io.foodful.authservice.dto.TokenValidationResponse;
 import io.foodful.authservice.service.LoginService;
+import io.foodful.authservice.service.message.AccessTokenValidationResult;
 import io.foodful.authservice.service.message.LoginMessage;
 import io.foodful.authservice.service.message.LoginResult;
 import io.foodful.authservice.service.message.TokenResult;
@@ -39,4 +41,12 @@ public class DTOMapper {
                 .refresh_token_expires(result.refreshTokenExpires.toString())
                 .build();
     }
+
+    public static TokenValidationResponse tokenValidationResultToResponse(AccessTokenValidationResult result) {
+        return TokenValidationResponse.builder()
+                .isValid(result.isValid)
+                .userId(result.userId)
+                .build();
+    }
+
 }

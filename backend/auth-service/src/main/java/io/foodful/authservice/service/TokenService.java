@@ -6,6 +6,7 @@ import io.foodful.authservice.domain.Token;
 import io.foodful.authservice.error.InvalidTokenException;
 import io.foodful.authservice.repository.AccessTokenRepository;
 import io.foodful.authservice.repository.RefreshTokenRepository;
+import io.foodful.authservice.service.message.AccessTokenValidationResult;
 import io.foodful.authservice.service.message.TokenResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TokenService {
@@ -68,6 +70,19 @@ public class TokenService {
         String userId = refreshToken.getUserId();
         invalidateAccessToken(refreshToken.getAccessToken().getValue());
         return create(userId);
+    }
+
+    public AccessTokenValidationResult validateAccessToken(String accessTokenToLookFor) {
+        Optional<AccessToken> accessToken = accessTokenRepository.findById(accessTokenToLookFor);
+
+        if (accessToken.isPresent()) {
+            return AccessTokenValidationResult.builder()
+                    .userId(accessToken.get().getUserId())
+                    .isValid(checkTokenValidity(accessToken.get()))
+                    .build();
+        } else {
+            return AccessTokenValidationResult.builder().isValid(false).build();
+        }
     }
 
     @Transactional
