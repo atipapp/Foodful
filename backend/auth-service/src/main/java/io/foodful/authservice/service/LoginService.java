@@ -1,16 +1,23 @@
 package io.foodful.authservice.service;
 
+import feign.FeignException;
+import io.foodful.authservice.error.InvalidTokenException;
 import io.foodful.authservice.service.facebook.FacebookAccessTokenResponse;
 import io.foodful.authservice.service.facebook.FacebookClient;
 import io.foodful.authservice.service.message.TokenResult;
 import io.foodful.authservice.service.message.LoginMessage;
 import io.foodful.authservice.service.message.LoginResult;
+import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class LoginService {
 
     public enum LoginProvider {
@@ -36,10 +43,22 @@ public class LoginService {
     public LoginResult login(LoginMessage message) {
 
         FacebookAccessTokenResponse facebookAccessToken = facebookClient.getAccessToken(facebookClientId, message.redirect_uri, facebookClientSecret, message.code);
-        facebookClient.getUserData(facebookAccessToken.accessToken, facebookClientSecret);
-        // TODO: call to user-service, which returns a userId, also add userId test upon renewal
+        getUserInfoFromFacebook(facebookAccessToken);
+        // TODO: call to user-service, which returns a userId
 
         return tokenResultToLoginResult(tokenService.createTokensForUser("MockUserId" + UUID.randomUUID().toString()));
+    }
+
+    private void getUserInfoFromFacebook(FacebookAccessTokenResponse token) {
+        String appSecretProof = sha256(token.accessToken, facebookClientSecret);
+
+        try {
+            facebookClient.getUserData(getAuthorizationHeaderValue(token.accessToken), appSecretProof);
+        } catch (FeignException exception) {
+            if (exception.status() == 401){
+                throw new InvalidTokenException();
+            }
+        }
     }
 
     private LoginResult tokenResultToLoginResult(TokenResult result) {
@@ -51,5 +70,25 @@ public class LoginService {
                 .build();
     }
 
+    private String getAuthorizationHeaderValue(String token) {
+        return "Bearer " + token;
+    }
+
+    private String sha256(String accessToken, String appSecret) {
+        String result = "";
+
+        try {
+            String algorithm = "HmacSHA256";
+            SecretKeySpec key = new SecretKeySpec(appSecret.getBytes(), algorithm);
+            Mac mac = Mac.getInstance(algorithm);
+            mac.init(key);
+            byte[] bytes = mac.doFinal(accessToken.getBytes("UTF-8"));
+            result = new String(Hex.encode(bytes));
+        } catch (Exception error) {
+            log.error("Encoding app secret proof failed.");
+        }
+
+        return result;
+    }
 
 }
