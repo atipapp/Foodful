@@ -8,6 +8,8 @@ import io.foodful.authservice.service.message.LoginResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class LoginService {
 
@@ -21,7 +23,8 @@ public class LoginService {
     private String facebookClientSecret;
 
 
-    public LoginService(TokenService tokenService, FacebookClient facebookClient,
+    public LoginService(TokenService tokenService,
+                        FacebookClient facebookClient,
                         @Value("${foodful.auth.social.facebook.client-secret}") String facebookClientSecret,
                         @Value("${foodful.auth.social.facebook.client-id}") String facebookClientId) {
         this.tokenService = tokenService;
@@ -36,11 +39,16 @@ public class LoginService {
         facebookClient.getUserData(facebookAccessToken.accessToken, facebookClientSecret);
         // TODO: call to user-service, which returns a userId
 
-        return tokenResultToLoginResult(tokenService.createTokensForUser("MockUserId"));
+        return tokenResultToLoginResult(tokenService.createTokensForUser("MockUserId" + UUID.randomUUID().toString()));
     }
 
     private LoginResult tokenResultToLoginResult(TokenResult result) {
-        return null;
+        return LoginResult.builder()
+                .accessToken(result.accessToken)
+                .accessTokenExpires(result.accessTokenExpires)
+                .refreshToken(result.refreshToken)
+                .refreshTokenExpires(result.refreshTokenExpires)
+                .build();
     }
 
 
