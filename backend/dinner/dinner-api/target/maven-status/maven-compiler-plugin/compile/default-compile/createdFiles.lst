@@ -1,0 +1,8 @@
+io/foodful/dinner/api/DinnerCreateRequest$DinnerCreateRequestBuilder.class
+io/foodful/dinner/api/DinnerInviteRequest$DinnerInviteRequestBuilder.class
+io/foodful/dinner/api/DinnerResponse.class
+io/foodful/dinner/api/DinnerUpdateRequest.class
+io/foodful/dinner/api/DinnerInviteRequest.class
+io/foodful/dinner/api/DinnerCreateRequest.class
+io/foodful/dinner/api/DinnerUpdateRequest$DinnerUpdateRequestBuilder.class
+io/foodful/dinner/api/DinnerResponse$DinnerResponseBuilder.class
