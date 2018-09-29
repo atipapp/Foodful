@@ -43,11 +43,11 @@ public class TokenService {
 
     @Transactional
     public TokenResult createTokensForUser(String userId) {
-        AccessToken accessToken = this.createAccessTokenForUser(userId);
-        accessToken = this.accessTokenRepository.save(accessToken);
+        AccessToken accessToken = createAccessTokenForUser(userId);
+        accessToken = accessTokenRepository.save(accessToken);
 
-        RefreshToken refreshToken = this.createRefreshTokenForUser(accessToken, userId);
-        refreshToken = this.refreshTokenRepository.save(refreshToken);
+        RefreshToken refreshToken = createRefreshTokenForUser(accessToken, userId);
+        refreshToken = refreshTokenRepository.save(refreshToken);
 
         return TokenResult.builder()
                 .accessToken(accessToken.getValue())
@@ -60,12 +60,12 @@ public class TokenService {
     @Transactional
     public TokenResult renew(String refreshTokenId) {
         RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenId).orElse(null);
-        if (refreshToken == null || !this.checkTokenValidity(refreshToken)) {
+        if (refreshToken == null || !checkTokenValidity(refreshToken)) {
             throw new InvalidTokenException();
         }
         String userId = refreshToken.getUserId();
-        this.invalidateAccessToken(refreshToken.getAccessToken().getValue());
-        return this.createTokensForUser(userId);
+        invalidateAccessToken(refreshToken.getAccessToken().getValue());
+        return createTokensForUser(userId);
     }
 
     private AccessToken createAccessTokenForUser(String userId) {
@@ -78,7 +78,7 @@ public class TokenService {
 
     private RefreshToken createRefreshTokenForUser(AccessToken accessToken, String userId) {
         RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setValue(generateRandomToken(this.refreshTokenLength));
+        refreshToken.setValue(generateRandomToken(refreshTokenLength));
         refreshToken.setExpirationDate(OffsetDateTime.now().plusHours(refreshTokenExpiresInHours));
         refreshToken.setUserId(userId);
         refreshToken.setAccessToken(accessToken);
@@ -86,8 +86,8 @@ public class TokenService {
     }
 
     private void invalidateAccessToken(String accessToken) {
-        this.refreshTokenRepository.deleteByAccessToken_Value(accessToken);
-        this.accessTokenRepository.deleteById(accessToken);
+        refreshTokenRepository.deleteByAccessToken_Value(accessToken);
+        accessTokenRepository.deleteById(accessToken);
     }
 
     private String generateRandomToken(int length) {
