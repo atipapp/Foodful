@@ -1,7 +1,8 @@
 package io.foodful.authservice;
 
+import io.foodful.authservice.dto.AccessTokenRenewalRequest;
 import io.foodful.authservice.dto.LoginRequest;
-import io.foodful.authservice.dto.LoginResponse;
+import io.foodful.authservice.dto.TokenResponse;
 import io.foodful.authservice.service.facebook.FacebookAccessTokenResponse;
 import io.foodful.authservice.service.facebook.FacebookClient;
 import io.foodful.authservice.service.facebook.FacebookUserResponse;
@@ -20,6 +21,7 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -64,18 +66,54 @@ public class SocialLoginIT {
                 .provider("FACEBOOK")
                 .build();
 
-        LoginResponse response = client.post().uri("/oauth/login/social").syncBody(request)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody(LoginResponse.class)
-                .returnResult().getResponseBody();
+        TokenResponse response = socialLogin(request);
 
         assertNotNull(response.access_token);
         assertNotNull(response.refresh_token);
         assertNotNull(response.access_token_expires);
         assertNotNull(response.refresh_token_expires);
+    }
+
+    private TokenResponse socialLogin(LoginRequest request) {
+        return client.post().uri("/oauth/login/social").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(TokenResponse.class)
+                .returnResult().getResponseBody();
+    }
+
+    @Test
+    void renewAccessTokenWithRefreshToken() {
+        TokenResponse login = withOneLogin();
+
+        AccessTokenRenewalRequest request = AccessTokenRenewalRequest.builder()
+                .refreshToken(login.refresh_token)
+                .build();
+
+        TokenResponse response = client.post().uri("/oauth/token").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(TokenResponse.class)
+                .returnResult().getResponseBody();
+
+        assertNotNull(response.access_token);
+        assertNotEquals(login.access_token, response.access_token);
+        assertNotEquals(login.access_token_expires, response.access_token_expires);
+        assertNotEquals(login.refresh_token, response.refresh_token);
+    }
+
+    private TokenResponse withOneLogin() {
+        LoginRequest request = LoginRequest.builder()
+                .code(generateRandomToken(50))
+                .redirect_uri("localhost")
+                .provider("FACEBOOK")
+                .build();
+
+        return socialLogin(request);
     }
 
     private String generateRandomToken(int length) {

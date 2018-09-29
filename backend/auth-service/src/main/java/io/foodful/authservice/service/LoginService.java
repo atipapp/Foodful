@@ -37,7 +37,7 @@ public class LoginService {
 
         FacebookAccessTokenResponse facebookAccessToken = facebookClient.getAccessToken(facebookClientId, message.redirect_uri, facebookClientSecret, message.code);
         facebookClient.getUserData(facebookAccessToken.accessToken, facebookClientSecret);
-        // TODO: call to user-service, which returns a userId
+        // TODO: call to user-service, which returns a userId, also add userId test upon renewal
 
         return tokenResultToLoginResult(tokenService.createTokensForUser("MockUserId" + UUID.randomUUID().toString()));
     }
