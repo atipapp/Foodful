@@ -28,8 +28,8 @@
     </properties>
     
     <modules>
-        <module>dinner-service</module>
-        <module>auth-service</module>
+        <module>dinner</module>
+        <module>auth</module>
         <module>commons</module>
     </modules>
 
