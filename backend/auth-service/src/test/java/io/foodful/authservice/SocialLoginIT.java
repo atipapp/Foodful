@@ -1,8 +1,6 @@
 package io.foodful.authservice;
 
-import io.foodful.authservice.dto.AccessTokenRenewalRequest;
-import io.foodful.authservice.dto.LoginRequest;
-import io.foodful.authservice.dto.TokenResponse;
+import io.foodful.authservice.dto.*;
 import io.foodful.authservice.service.facebook.FacebookAccessTokenResponse;
 import io.foodful.authservice.service.facebook.FacebookClient;
 import io.foodful.authservice.service.facebook.FacebookUserResponse;
@@ -21,8 +19,7 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
@@ -74,16 +71,6 @@ public class SocialLoginIT {
         assertNotNull(response.refresh_token_expires);
     }
 
-    private TokenResponse socialLogin(LoginRequest request) {
-        return client.post().uri("/oauth/login/social").syncBody(request)
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .expectBody(TokenResponse.class)
-                .returnResult().getResponseBody();
-    }
-
     @Test
     void renewAccessTokenWithRefreshToken() {
         TokenResponse login = withOneLogin();
@@ -106,6 +93,26 @@ public class SocialLoginIT {
         assertNotEquals(login.refresh_token, response.refresh_token);
     }
 
+    @Test
+    void validateAccessToken() {
+        TokenResponse login = withOneLogin();
+
+        TokenValidationRequest request = TokenValidationRequest.builder()
+                .accessToken(login.access_token)
+                .build();
+
+        TokenValidationResponse response = client.post().uri("/oauth/token/validate").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(TokenValidationResponse.class)
+                .returnResult().getResponseBody();
+
+        assertNotNull(response.userId);
+        assertTrue(response.isValid);
+    }
+
     private TokenResponse withOneLogin() {
         LoginRequest request = LoginRequest.builder()
                 .code(generateRandomToken(50))
@@ -114,6 +121,16 @@ public class SocialLoginIT {
                 .build();
 
         return socialLogin(request);
+    }
+
+    private TokenResponse socialLogin(LoginRequest request) {
+        return client.post().uri("/oauth/login/social").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(TokenResponse.class)
+                .returnResult().getResponseBody();
     }
 
     private String generateRandomToken(int length) {
