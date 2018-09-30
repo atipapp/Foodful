@@ -30,6 +30,7 @@
     <modules>
         <module>dinner</module>
         <module>auth</module>
+        <module>user</module>
         <module>commons</module>
     </modules>
 
