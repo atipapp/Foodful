@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.foodful.dinnerservice.endpoint.DinnerServiceIT
--------------------------------------------------------------------------------
-Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.543 s - in io.foodful.dinnerservice.endpoint.DinnerServiceIT
