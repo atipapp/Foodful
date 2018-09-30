@@ -1,10 +1,7 @@
 package io.foodful.user.core.domain;
 
 import io.foodful.commons.data.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -13,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @Table(name = "users")
