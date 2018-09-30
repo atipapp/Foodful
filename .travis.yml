@@ -8,6 +8,7 @@ services:
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS DinnerService;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS AuthService;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS UserService;'
 
 language: java
 jdk: oraclejdk8
