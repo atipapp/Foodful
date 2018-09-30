@@ -21,7 +21,6 @@
 
 	<dependencies>
 	
-	
         <dependency>
             <groupId>io.foodful</groupId>
             <artifactId>user-api</artifactId>
