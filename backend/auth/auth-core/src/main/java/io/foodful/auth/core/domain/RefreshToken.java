@@ -1,0 +1,17 @@
+package io.foodful.auth.core.domain;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
+@Entity
+@Getter
+@Setter
+public class RefreshToken extends Token{
+
+    @OneToOne
+    private AccessToken accessToken;
+
+}
