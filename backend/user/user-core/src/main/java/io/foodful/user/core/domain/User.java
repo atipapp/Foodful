@@ -26,6 +26,8 @@ public class User extends BaseEntity {
 
     private boolean enabled;
 
+    private String externalId;
+
     public enum Role {
         USER, ADMIN
     }

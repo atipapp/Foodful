@@ -37,15 +37,41 @@ public class UserServiceIT {
                 .firstName("David")
                 .lastName("Hasselhoff")
                 .email("david@hasselhoff.com")
+                .externalId(getExternalIdMock())
                 .build();
 
-        UserResponse response = createUser(request);
+        UserResponse response = createOrUpdateUser(request);
 
         assertEquals(request.email, response.email);
         assertEquals(request.firstName, response.firstName);
         assertEquals(request.lastName, response.lastName);
     }
 
+    @Test
+    void updateUser() {
+        final String externalIdMock = getExternalIdMock();
+
+        UserResponse createdUser = createOrUpdateUser(UserRequest.builder()
+                .firstName("Mock")
+                .lastName("Hasselhoff")
+                .email(UUID.randomUUID().toString() + "@hasselhoff.com")
+                .externalId(externalIdMock)
+                .build());
+
+        UserRequest request = UserRequest.builder()
+                .firstName("Updated")
+                .lastName("Hasselhoff")
+                .email(UUID.randomUUID().toString() + "@hasselhoff.com")
+                .externalId(externalIdMock)
+                .build();
+
+        UserResponse response = createOrUpdateUser(request);
+
+        assertEquals(request.email, response.email);
+        assertEquals(request.firstName, response.firstName);
+        assertEquals(request.lastName, response.lastName);
+        assertEquals(createdUser.userId, response.userId);
+    }
 
     @Test
     void getUser() {
@@ -69,21 +95,26 @@ public class UserServiceIT {
     }
 
     private UserResponse withOneUser() {
-        return createUser(UserRequest.builder()
+        return createOrUpdateUser(UserRequest.builder()
                 .firstName("Mock")
                 .lastName("Hasselhoff")
                 .email(UUID.randomUUID().toString() + "@hasselhoff.com")
+                .externalId(getExternalIdMock())
                 .build());
     }
 
-    private UserResponse createUser(UserRequest request) {
-        return client.post().uri("/user").syncBody(request)
+    private UserResponse createOrUpdateUser(UserRequest request) {
+        return client.put().uri("/user").syncBody(request)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody(UserResponse.class)
                 .returnResult().getResponseBody();
+    }
+
+    private String getExternalIdMock() {
+        return UUID.randomUUID().toString().split("-")[0];
     }
 
 }

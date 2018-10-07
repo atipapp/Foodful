@@ -29,6 +29,12 @@
 
         <dependency>
             <groupId>io.foodful</groupId>
+            <artifactId>user-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.foodful</groupId>
             <artifactId>commons-test</artifactId>
             <version>${project.version}</version>
         </dependency>
