@@ -3,15 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>dinner-core</artifactId>
+	<artifactId>user-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<description>Service for storing dinners.</description>
+	<description>Service for storing users.</description>
 
 	<parent>
 		<groupId>io.foodful</groupId>
-		<artifactId>dinner</artifactId>
+		<artifactId>user</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -20,16 +20,16 @@
 	</properties>
 
 	<dependencies>
-
+	
         <dependency>
             <groupId>io.foodful</groupId>
-            <artifactId>commons-core</artifactId>
+            <artifactId>user-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.foodful</groupId>
-            <artifactId>commons-test</artifactId>
+            <artifactId>commons-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -41,7 +41,7 @@
 
         <dependency>
             <groupId>io.foodful</groupId>
-            <artifactId>dinner-api</artifactId>
+            <artifactId>commons-test</artifactId>
             <version>${project.version}</version>
         </dependency>
 

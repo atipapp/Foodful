@@ -1,5 +1,6 @@
 package io.foodful.dinner.core.domain;
 
+import io.foodful.commons.data.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import javax.persistence.ManyToOne;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment extends BaseEntity{
+public class Comment extends BaseEntity {
 
     private String content;
 

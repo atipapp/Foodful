@@ -1,5 +1,6 @@
 package io.foodful.dinner.core.domain;
 
+import io.foodful.commons.data.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Entity;

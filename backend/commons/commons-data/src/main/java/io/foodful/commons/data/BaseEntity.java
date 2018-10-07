@@ -1,4 +1,4 @@
-package io.foodful.dinner.core.domain;
+package io.foodful.commons.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
