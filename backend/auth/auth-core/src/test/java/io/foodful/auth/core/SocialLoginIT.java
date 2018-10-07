@@ -147,7 +147,7 @@ public class SocialLoginIT {
     }
 
     private void setUpUserClientMock() {
-        when(userClient.createUser(any())).thenAnswer((Answer<UserResponse>) invocationOnMock -> {
+        when(userClient.createOrUpdateUser(any())).thenAnswer((Answer<UserResponse>) invocationOnMock -> {
             UserRequest argument = invocationOnMock.getArgument(0);
             return UserResponse.builder()
                     .email(argument.email)

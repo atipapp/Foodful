@@ -8,6 +8,7 @@ import io.foodful.user.core.service.message.UserResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,21 +19,39 @@ public class UserService {
         this.repository = repository;
     }
 
-    public UserResult create(UserMessage message) {
-        User user = User.builder()
-                .email(message.email)
-                .enabled(true)
-                .firstName(message.firstName)
-                .lastName(message.lastName)
-                .roles(Collections.singletonList(User.Role.USER))
-                .build();
+    @SuppressWarnings("OptionalIsPresent")
+    public UserResult createOrUpdate(UserMessage message) {
+        Optional<User> alreadyRegisteredUser = repository.findByExternalId(message.externalId);
 
-        return convertUserToResult(repository.save(user));
+        User userToSave = alreadyRegisteredUser.isPresent() ?
+                copyUserDataToUserFromMessage(alreadyRegisteredUser.get(), message) : createUserFromMessage(message);
+
+        return convertUserToResult(repository.save(userToSave));
     }
 
     public UserResult get(String userId) {
         return convertUserToResult(repository
                 .findById(userId).orElseThrow(UserNotFoundException::new));
+    }
+
+    private User createUserFromMessage(UserMessage message) {
+        User userToSave;
+        userToSave = User.builder()
+                .email(message.email)
+                .enabled(true)
+                .firstName(message.firstName)
+                .lastName(message.lastName)
+                .roles(Collections.singletonList(User.Role.USER))
+                .externalId(message.externalId)
+                .build();
+        return userToSave;
+    }
+
+    private User copyUserDataToUserFromMessage(User userToUpdate, UserMessage message) {
+        userToUpdate.setEmail(message.email);
+        userToUpdate.setFirstName(message.firstName);
+        userToUpdate.setLastName(message.lastName);
+        return userToUpdate;
     }
 
     private UserResult convertUserToResult(User user) {

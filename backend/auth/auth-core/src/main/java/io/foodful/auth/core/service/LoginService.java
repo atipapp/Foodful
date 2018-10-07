@@ -54,7 +54,7 @@ public class LoginService {
         FacebookAccessTokenResponse facebookAccessToken = facebookClient.getAccessToken(facebookClientId, message.redirect_uri, facebookClientSecret, message.code);
         FacebookUserResponse userInfo = getUserInfoFromFacebook(facebookAccessToken);
 
-        UserResponse createdOrUpdatedUser = userClient.createUser(UserRequest.builder()
+        UserResponse createdOrUpdatedUser = userClient.createOrUpdateUser(UserRequest.builder()
                 .email(userInfo.email)
                 .firstName(userInfo.firstName)
                 .lastName(userInfo.lastName)

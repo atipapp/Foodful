@@ -19,9 +19,9 @@ public class UserController {
         this.service = service;
     }
 
-    @PostMapping("")
-    public UserResponse createUser(@RequestBody UserRequest request) {
-        UserResult result = service.create(userRequestToMessage(request));
+    @PutMapping("")
+    public UserResponse createOrUpdateUser(@RequestBody UserRequest request) {
+        UserResult result = service.createOrUpdate(userRequestToMessage(request));
         return userResultToResponse(result);
     }
 
