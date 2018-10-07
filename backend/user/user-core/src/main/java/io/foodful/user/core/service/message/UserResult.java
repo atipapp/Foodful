@@ -12,5 +12,6 @@ public class UserResult {
     public String firstName;
     public String lastName;
     public String email;
+    public String userId;
 
 }

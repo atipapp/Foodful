@@ -25,6 +25,7 @@ public class DTOConverter {
                 .email(result.email)
                 .firstName(result.firstName)
                 .lastName(result.lastName)
+                .userId(result.userId)
                 .build();
     }
 }

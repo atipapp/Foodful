@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Duration;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,17 +39,51 @@ public class UserServiceIT {
                 .email("david@hasselhoff.com")
                 .build();
 
-        UserResponse response = client.post().uri("/user").syncBody(request)
+        UserResponse response = createUser(request);
+
+        assertEquals(request.email, response.email);
+        assertEquals(request.firstName, response.firstName);
+        assertEquals(request.lastName, response.lastName);
+    }
+
+
+    @Test
+    void getUser() {
+        UserResponse user = withOneUser();
+        UserResponse response = getUserById(user.userId);
+
+        assertEquals(user.userId, response.userId);
+        assertEquals(user.email, response.email);
+        assertEquals(user.firstName, response.firstName);
+        assertEquals(user.lastName, response.lastName);
+    }
+
+    private UserResponse getUserById(String userId) {
+        return client.get().uri("/user/" + userId)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody(UserResponse.class)
                 .returnResult().getResponseBody();
+    }
 
-        assertEquals(request.email, response.email);
-        assertEquals(request.firstName, response.firstName);
-        assertEquals(request.lastName, response.lastName);
+    private UserResponse withOneUser() {
+        return createUser(UserRequest.builder()
+                .firstName("Mock")
+                .lastName("Hasselhoff")
+                .email(UUID.randomUUID().toString() + "@hasselhoff.com")
+                .build());
+    }
+
+    private UserResponse createUser(UserRequest request) {
+        return client.post().uri("/user").syncBody(request)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBody(UserResponse.class)
+                .returnResult().getResponseBody();
     }
 
 }

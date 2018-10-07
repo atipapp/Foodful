@@ -1,6 +1,7 @@
 package io.foodful.user.core.service;
 
 import io.foodful.user.core.domain.User;
+import io.foodful.user.core.errors.UserNotFoundException;
 import io.foodful.user.core.repository.UserRepository;
 import io.foodful.user.core.service.message.UserMessage;
 import io.foodful.user.core.service.message.UserResult;
@@ -29,12 +30,17 @@ public class UserService {
         return convertUserToResult(repository.save(user));
     }
 
+    public UserResult get(String userId) {
+        return convertUserToResult(repository
+                .findById(userId).orElseThrow(UserNotFoundException::new));
+    }
+
     private UserResult convertUserToResult(User user) {
         return UserResult.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .userId(user.getId())
                 .build();
     }
-
 }
