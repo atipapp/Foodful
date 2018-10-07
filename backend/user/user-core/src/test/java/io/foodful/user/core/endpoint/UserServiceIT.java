@@ -1,7 +1,7 @@
 package io.foodful.user.core.endpoint;
 
-import io.foodful.user.api.UserRequest;
-import io.foodful.user.api.UserResponse;
+import io.foodful.user.api.dto.UserRequest;
+import io.foodful.user.api.dto.UserResponse;
 import io.foodful.user.core.UserServiceApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

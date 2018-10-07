@@ -1,12 +1,11 @@
 package io.foodful.dinner.core.controller;
 
 import io.foodful.commons.core.dto.AuthInfo;
-import io.foodful.dinner.api.DinnerCreateRequest;
-import io.foodful.dinner.api.DinnerInviteRequest;
-import io.foodful.dinner.api.DinnerResponse;
-import io.foodful.dinner.api.DinnerUpdateRequest;
+import io.foodful.dinner.api.dto.DinnerCreateRequest;
+import io.foodful.dinner.api.dto.DinnerInviteRequest;
+import io.foodful.dinner.api.dto.DinnerResponse;
+import io.foodful.dinner.api.dto.DinnerUpdateRequest;
 import io.foodful.dinner.core.service.message.DinnerResult;
-import io.foodful.dinner.core.util.DinnerConverter;
 import io.foodful.dinner.core.service.DinnerService;
 import org.springframework.web.bind.annotation.*;
 

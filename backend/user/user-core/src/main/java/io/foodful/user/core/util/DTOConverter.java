@@ -1,7 +1,7 @@
 package io.foodful.user.core.util;
 
-import io.foodful.user.api.UserRequest;
-import io.foodful.user.api.UserResponse;
+import io.foodful.user.api.dto.UserRequest;
+import io.foodful.user.api.dto.UserResponse;
 import io.foodful.user.core.service.message.UserMessage;
 import io.foodful.user.core.service.message.UserResult;
 

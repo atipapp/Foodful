@@ -1,8 +1,8 @@
 package io.foodful.auth.core.util;
 
-import io.foodful.auth.api.LoginRequest;
-import io.foodful.auth.api.TokenResponse;
-import io.foodful.auth.api.TokenValidationResponse;
+import io.foodful.auth.api.dto.LoginRequest;
+import io.foodful.auth.api.dto.TokenResponse;
+import io.foodful.auth.api.dto.TokenValidationResponse;
 import io.foodful.auth.core.service.LoginService;
 import io.foodful.auth.core.service.message.AccessTokenValidationResult;
 import io.foodful.auth.core.service.message.LoginMessage;

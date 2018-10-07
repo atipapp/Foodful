@@ -1,5 +1,9 @@
 package io.foodful.dinner.api;
 
+import io.foodful.dinner.api.dto.DinnerCreateRequest;
+import io.foodful.dinner.api.dto.DinnerInviteRequest;
+import io.foodful.dinner.api.dto.DinnerResponse;
+import io.foodful.dinner.api.dto.DinnerUpdateRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package io.foodful.user.core.controller;
 
-import io.foodful.user.api.UserRequest;
-import io.foodful.user.api.UserResponse;
+import io.foodful.user.api.dto.UserRequest;
+import io.foodful.user.api.dto.UserResponse;
 import io.foodful.user.core.service.UserService;
 import io.foodful.user.core.service.message.UserResult;
 import org.springframework.web.bind.annotation.*;
