@@ -29,6 +29,9 @@ foodful:
         url: https://graph.facebook.com/v3.1
         client-secret: INSERT_SECRET_HERE
         client-id: INSERT_ID_HERE
+  clients:
+    prefix: http://
+    postfix: .internal
 
 ---
 spring:
