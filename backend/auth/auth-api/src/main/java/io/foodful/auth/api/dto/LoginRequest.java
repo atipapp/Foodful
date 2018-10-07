@@ -1,4 +1,4 @@
-package io.foodful.auth.api;
+package io.foodful.auth.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

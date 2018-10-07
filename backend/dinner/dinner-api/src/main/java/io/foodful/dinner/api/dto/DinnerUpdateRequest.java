@@ -1,4 +1,4 @@
-package io.foodful.dinner.api;
+package io.foodful.dinner.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

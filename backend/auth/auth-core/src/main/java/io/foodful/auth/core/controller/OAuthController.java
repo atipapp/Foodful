@@ -1,6 +1,6 @@
 package io.foodful.auth.core.controller;
 
-import io.foodful.auth.api.*;
+import io.foodful.auth.api.dto.*;
 import io.foodful.auth.core.service.LoginService;
 import io.foodful.auth.core.service.TokenService;
 import io.foodful.auth.core.service.message.AccessTokenValidationResult;

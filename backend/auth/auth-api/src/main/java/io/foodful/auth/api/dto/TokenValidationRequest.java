@@ -1,4 +1,4 @@
-package io.foodful.dinner.api;
+package io.foodful.auth.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DinnerInviteRequest {
+public class TokenValidationRequest {
 
-    public String userId;
+    public String access_token;
 
 }

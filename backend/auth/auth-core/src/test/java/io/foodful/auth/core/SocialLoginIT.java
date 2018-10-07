@@ -1,6 +1,6 @@
 package io.foodful.auth.core;
 
-import io.foodful.auth.api.*;
+import io.foodful.auth.api.dto.*;
 import io.foodful.auth.core.service.facebook.FacebookAccessTokenResponse;
 import io.foodful.auth.core.service.facebook.FacebookClient;
 import io.foodful.auth.core.service.facebook.FacebookUserResponse;

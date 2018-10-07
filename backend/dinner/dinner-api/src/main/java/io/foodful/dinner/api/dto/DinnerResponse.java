@@ -1,19 +1,21 @@
-package io.foodful.dinner.api;
+package io.foodful.dinner.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DinnerCreateRequest {
+public class DinnerResponse {
 
+    public String id;
     public String title;
     public String location;
     public String scheduledTime;
-    public List<String> guests;
+    public Map<String, String> guests;
+    public String createdBy;
 
 }
