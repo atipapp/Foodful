@@ -5,6 +5,11 @@ script:
 services:
   - mysql
   
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+  
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS DinnerService;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS AuthService;'
