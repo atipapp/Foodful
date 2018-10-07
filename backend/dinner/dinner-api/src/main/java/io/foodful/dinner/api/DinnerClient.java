@@ -1,6 +1,5 @@
 package io.foodful.dinner.api;
 
-import com.sun.tools.internal.ws.wscompile.AuthInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,18 +7,18 @@ import org.springframework.web.bind.annotation.*;
 public interface DinnerClient {
 
     @PostMapping("/dinner")
-    DinnerResponse createDinner(@RequestBody DinnerCreateRequest request, @RequestAttribute AuthInfo authInfo);
+    DinnerResponse createDinner(@RequestBody DinnerCreateRequest request);
 
     @GetMapping("/dinner/{dinnerId}")
-    DinnerResponse getDinner(@PathVariable String dinnerId, @RequestAttribute AuthInfo authInfo);
+    DinnerResponse getDinner(@PathVariable String dinnerId);
 
     @PutMapping("/dinner/{dinnerId}")
-    DinnerResponse updateDinner(@PathVariable String dinnerId, @RequestBody DinnerUpdateRequest request, @RequestAttribute AuthInfo authInfo);
+    DinnerResponse updateDinner(@PathVariable String dinnerId, @RequestBody DinnerUpdateRequest request);
 
     @DeleteMapping("/dinner/{dinnerId}")
-    void deleteDinner(@PathVariable String dinnerId, @RequestAttribute AuthInfo authInfo);
+    void deleteDinner(@PathVariable String dinnerId);
 
     @PostMapping("/dinner/{dinnerId}/invite")
-    DinnerResponse inviteToDinner(@PathVariable String dinnerId, @RequestBody DinnerInviteRequest request, @RequestAttribute AuthInfo authInfo);
+    DinnerResponse inviteToDinner(@PathVariable String dinnerId, @RequestBody DinnerInviteRequest request);
 
 }
