@@ -16,6 +16,9 @@ foodful:
     user-data-header: X-Foodful-User
     jwt:
       key: 3jfef4e2e7cb44b2893169cd7c276824
+  clients:
+    prefix: http://
+    postfix: .internal
 
 ---
 spring:
