@@ -15,7 +15,6 @@ public class UserResult {
     public String lastName;
     public String email;
     public String userId;
-
     public List<String> roles;
 
 }

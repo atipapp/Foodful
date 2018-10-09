@@ -34,4 +34,5 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
         info.userId = userId;
         return info;
     }
+
 }

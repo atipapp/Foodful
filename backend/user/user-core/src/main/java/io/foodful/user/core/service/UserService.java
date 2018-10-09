@@ -64,4 +64,5 @@ public class UserService {
                 .roles(user.getRoles().stream().map(Enum::name).collect(Collectors.toList()))
                 .build();
     }
+
 }

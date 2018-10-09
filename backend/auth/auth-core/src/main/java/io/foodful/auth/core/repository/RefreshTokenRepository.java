@@ -11,4 +11,5 @@ public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Str
     void deleteByAccessToken_Value(String accessToken);
 
     List<RefreshToken> findRefreshTokenByExpirationDateBefore(OffsetDateTime now);
+
 }
