@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,6 +83,7 @@ public class UserServiceIT {
         assertEquals(user.email, response.email);
         assertEquals(user.firstName, response.firstName);
         assertEquals(user.lastName, response.lastName);
+        assertEquals(Collections.singletonList("USER").get(0), response.roles.get(0));
     }
 
     private UserResponse getUserById(String userId) {
