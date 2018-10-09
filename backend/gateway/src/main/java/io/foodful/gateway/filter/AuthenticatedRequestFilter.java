@@ -26,8 +26,8 @@ public class AuthenticatedRequestFilter implements GatewayFilterFactory {
     private AuthClient authClient;
 
     public AuthenticatedRequestFilter(
-            @Value("${io.foodful.auth.token-header}") String tokenHeaderName,
-            @Value("${io.foodful.auth.user-data-header}") String userDataHeaderName,
+            @Value("${foodful.auth.token-header}") String tokenHeaderName,
+            @Value("${foodful.auth.user-data-header}") String userDataHeaderName,
             AuthClient authClient
     ) {
         this.authClient = authClient;
