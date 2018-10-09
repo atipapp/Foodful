@@ -32,6 +32,7 @@
         <module>auth</module>
         <module>user</module>
         <module>commons</module>
+		<module>gateway</module>
     </modules>
 
     <dependencies>

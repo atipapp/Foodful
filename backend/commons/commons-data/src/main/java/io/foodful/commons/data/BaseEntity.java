@@ -39,4 +39,5 @@ public abstract class BaseEntity {
     public void onPreUpdate() {
         this.lastModified = OffsetDateTime.now();
     }
+
 }

@@ -17,4 +17,7 @@ public interface AuthClient {
     @PostMapping("/oauth/token/validate")
     TokenValidationResponse validateAccessToken(@RequestBody TokenValidationRequest request);
 
+    @PostMapping("/jwt")
+    InternalJwtCreationResponse createInternalJwt(@RequestBody InternalJwtCreationRequest request);
+
 }

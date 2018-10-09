@@ -21,6 +21,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,12 +31,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = AuthServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-public class SocialLoginIT {
-
-    @LocalServerPort
-    private int randomServerPort;
-
-    protected WebTestClient client;
+public class SocialLoginIT extends EndpointTestBase {
 
     @MockBean
     private FacebookClient facebookClient;
@@ -44,12 +40,11 @@ public class SocialLoginIT {
     private UserClient userClient;
 
     @BeforeEach
-    void setUpClient() {
-        client = WebTestClient.bindToServer().baseUrl("http://localhost:" + randomServerPort).responseTimeout(Duration.ofMinutes(1)).build();
-
+    void setUpMocks() {
         setUpFacebookClientMock();
         setUpUserClientMock();
     }
+
 
     @Test
     void exchangeAuthCodeForAccessAndRefreshTokens() {
@@ -153,8 +148,8 @@ public class SocialLoginIT {
                     .email(argument.email)
                     .firstName(argument.firstName)
                     .lastName(argument.lastName)
-                    .email(argument.email)
                     .userId(UUID.randomUUID().toString())
+                    .roles(Collections.singletonList("USER"))
                     .build();
         });
     }
