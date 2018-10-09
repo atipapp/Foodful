@@ -10,9 +10,13 @@ spring:
   cloud:
     gateway:
       routes:
-      - id: example_route
-        uri: http://example-service-v1.internal
+      - id: dinner_route
+        uri: http://dinner-service-v1.internal
         predicates:
-        - Path=/example-service/v1/**
+        - Path=/dinner-service/v1/**
         filters:
         - AuthenticatedRequestFilter
+      - id: auth_route
+        uri: http://auth-service-v1.internal
+        predicates:
+        - Path=/auth-service/v1/**
