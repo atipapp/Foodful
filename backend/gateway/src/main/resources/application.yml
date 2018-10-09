@@ -1,0 +1,18 @@
+foodful:
+  auth:
+    user-data-header: X-Foodful-User
+    token-header: Authorization
+  clients:
+    prefix: http://
+    postfix: .internal
+
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: example_route
+        uri: http://example-service-v1.internal
+        predicates:
+        - Path=/example-service/v1/**
+        filters:
+        - AuthenticatedRequestFilter
