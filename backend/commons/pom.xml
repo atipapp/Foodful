@@ -15,6 +15,7 @@
 
     <modules>
         <module>commons-core</module>
+        <module>commons-data</module>
         <module>commons-test</module>
     </modules>
 

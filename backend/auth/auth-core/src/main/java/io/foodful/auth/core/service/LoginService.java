@@ -1,12 +1,17 @@
 package io.foodful.auth.core.service;
 
 import feign.FeignException;
+import io.foodful.auth.core.error.FacebookApiException;
 import io.foodful.auth.core.error.InvalidTokenException;
 import io.foodful.auth.core.service.facebook.FacebookAccessTokenResponse;
 import io.foodful.auth.core.service.facebook.FacebookClient;
-import io.foodful.auth.core.service.message.TokenResult;
+import io.foodful.auth.core.service.facebook.FacebookUserResponse;
 import io.foodful.auth.core.service.message.LoginMessage;
 import io.foodful.auth.core.service.message.LoginResult;
+import io.foodful.auth.core.service.message.TokenResult;
+import io.foodful.user.api.UserClient;
+import io.foodful.user.api.dto.UserRequest;
+import io.foodful.user.api.dto.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -25,17 +29,22 @@ public class LoginService {
     }
 
     private TokenService tokenService;
+
     private FacebookClient facebookClient;
+    private UserClient userClient;
+
     private String facebookClientId;
     private String facebookClientSecret;
 
 
     public LoginService(TokenService tokenService,
                         FacebookClient facebookClient,
+                        UserClient userClient,
                         @Value("${foodful.auth.social.facebook.client-secret}") String facebookClientSecret,
                         @Value("${foodful.auth.social.facebook.client-id}") String facebookClientId) {
         this.tokenService = tokenService;
         this.facebookClient = facebookClient;
+        this.userClient = userClient;
         this.facebookClientId = facebookClientId;
         this.facebookClientSecret = facebookClientSecret;
     }
@@ -43,19 +52,29 @@ public class LoginService {
     public LoginResult login(LoginMessage message) {
 
         FacebookAccessTokenResponse facebookAccessToken = facebookClient.getAccessToken(facebookClientId, message.redirect_uri, facebookClientSecret, message.code);
-        getUserInfoFromFacebook(facebookAccessToken);
+        FacebookUserResponse userInfo = getUserInfoFromFacebook(facebookAccessToken);
 
-        return tokenResultToLoginResult(tokenService.create("MockUserId" + UUID.randomUUID().toString()));
+        UserResponse createdOrUpdatedUser = userClient.createOrUpdateUser(UserRequest.builder()
+                .email(userInfo.email)
+                .firstName(userInfo.firstName)
+                .lastName(userInfo.lastName)
+                .externalId(userInfo.id)
+                .build());
+
+        return tokenResultToLoginResult(tokenService.create(createdOrUpdatedUser.userId));
     }
 
-    private void getUserInfoFromFacebook(FacebookAccessTokenResponse token) {
+    private FacebookUserResponse getUserInfoFromFacebook(FacebookAccessTokenResponse token) {
         String appSecretProof = sha256(token.accessToken, facebookClientSecret);
 
         try {
-            facebookClient.getUserData(getAuthorizationHeaderValue(token.accessToken), appSecretProof);
+            return facebookClient.getUserData(getAuthorizationHeaderValue(token.accessToken), appSecretProof);
         } catch (FeignException exception) {
-            if (exception.status() == 401){
+            if (exception.status() == 401) {
                 throw new InvalidTokenException();
+            } else {
+                log.error("Facebook api exception occurred: ", exception);
+                throw new FacebookApiException();
             }
         }
     }

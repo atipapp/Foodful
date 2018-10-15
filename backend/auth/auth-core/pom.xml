@@ -29,7 +29,19 @@
 
         <dependency>
             <groupId>io.foodful</groupId>
+            <artifactId>user-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.foodful</groupId>
             <artifactId>commons-test</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.foodful</groupId>
+            <artifactId>auth-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -105,12 +117,6 @@
             <artifactId>junit-platform-launcher</artifactId>
             <version>${junit-platform.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.foodful</groupId>
-            <artifactId>auth-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

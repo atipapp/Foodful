@@ -1,13 +1,17 @@
 package io.foodful.auth.core;
 
-import io.foodful.auth.api.*;
+import io.foodful.auth.api.dto.*;
 import io.foodful.auth.core.service.facebook.FacebookAccessTokenResponse;
 import io.foodful.auth.core.service.facebook.FacebookClient;
 import io.foodful.auth.core.service.facebook.FacebookUserResponse;
+import io.foodful.user.api.UserClient;
+import io.foodful.user.api.dto.UserRequest;
+import io.foodful.user.api.dto.UserResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -17,43 +21,30 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.security.SecureRandom;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = AuthServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
-public class SocialLoginIT {
-
-    @LocalServerPort
-    private int randomServerPort;
-
-    protected WebTestClient client;
+public class SocialLoginIT extends EndpointTestBase {
 
     @MockBean
     private FacebookClient facebookClient;
 
+    @MockBean
+    private UserClient userClient;
+
     @BeforeEach
-    void setUpClient() {
-        client = WebTestClient.bindToServer().baseUrl("http://localhost:" + randomServerPort).responseTimeout(Duration.ofMinutes(1)).build();
-
-        doReturn(FacebookAccessTokenResponse.builder()
-                .accessToken(generateRandomToken(50))
-                .expiresInSeconds(720)
-                .tokenType("access")
-                .build())
-                .when(facebookClient).getAccessToken(any(), any(), any(), any());
-
-        doReturn(FacebookUserResponse.builder()
-                .email("david@hasselhoff.com")
-                .firstName("David")
-                .lastName("Hasselhoff")
-                .id(UUID.randomUUID().toString())
-                .build())
-                .when(facebookClient).getUserData(any(), any());
+    void setUpMocks() {
+        setUpFacebookClientMock();
+        setUpUserClientMock();
     }
+
 
     @Test
     void exchangeAuthCodeForAccessAndRefreshTokens() {
@@ -131,6 +122,36 @@ public class SocialLoginIT {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                 .expectBody(TokenResponse.class)
                 .returnResult().getResponseBody();
+    }
+
+    private void setUpFacebookClientMock() {
+        doReturn(FacebookAccessTokenResponse.builder()
+                .accessToken(generateRandomToken(50))
+                .expiresInSeconds(720)
+                .tokenType("access")
+                .build())
+                .when(facebookClient).getAccessToken(any(), any(), any(), any());
+
+        doReturn(FacebookUserResponse.builder()
+                .email("david@hasselhoff.com")
+                .firstName("David")
+                .lastName("Hasselhoff")
+                .id(UUID.randomUUID().toString())
+                .build())
+                .when(facebookClient).getUserData(any(), any());
+    }
+
+    private void setUpUserClientMock() {
+        when(userClient.createOrUpdateUser(any())).thenAnswer((Answer<UserResponse>) invocationOnMock -> {
+            UserRequest argument = invocationOnMock.getArgument(0);
+            return UserResponse.builder()
+                    .email(argument.email)
+                    .firstName(argument.firstName)
+                    .lastName(argument.lastName)
+                    .userId(UUID.randomUUID().toString())
+                    .roles(Collections.singletonList("USER"))
+                    .build();
+        });
     }
 
     private String generateRandomToken(int length) {

@@ -16,5 +16,4 @@ public class LoginResult {
     public String refreshToken;
     public OffsetDateTime refreshTokenExpires;
 
-
 }
