@@ -26,11 +26,12 @@ gcloud --quiet config set project $PROJECT_NAME_STG
 gcloud --quiet config set container/cluster $CLUSTER_NAME_STG
 gcloud --quiet config set compute/zone ${CLOUDSDK_COMPUTE_ZONE}
 gcloud --quiet container clusters get-credentials $CLUSTER_NAME_STG
+gcloud --quiet auth configure-docker
 
-gcloud docker -- push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_DINNER}
-gcloud docker -- push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_AUTH}
-gcloud docker -- push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_GATEWAY}
-gcloud docker -- push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_USER}
+docker push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_DINNER}
+docker push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_AUTH}
+docker push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_GATEWAY}
+docker push eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_USER}
 
 yes | gcloud beta container images add-tag eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_DINNER}:$TRAVIS_COMMIT eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_DINNER}:latest
 yes | gcloud beta container images add-tag eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_AUTH}:$TRAVIS_COMMIT eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_AUTH}:latest
