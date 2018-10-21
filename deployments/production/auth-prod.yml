@@ -48,7 +48,13 @@ spec:
                 secretKeyRef:
                   key: password
                   name: cloudsql-db-credentials
-                  
+          livenessProbe:
+            httpGet:
+                path: /actuator/health
+                port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+                              
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11
           imagePullPolicy: IfNotPresent        
