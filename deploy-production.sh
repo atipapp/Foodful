@@ -26,7 +26,7 @@ gcloud --quiet config set project $PROJECT_NAME_PRD
 gcloud --quiet config set container/cluster $CLUSTER_NAME_PRD
 gcloud --quiet config set compute/zone ${CLOUDSDK_COMPUTE_ZONE}
 gcloud --quiet container clusters get-credentials $CLUSTER_NAME_PRD
-gcloud --quiet auth configure-docker
+
 
 docker push eu.gcr.io/${PROJECT_NAME_PRD}/${DOCKER_IMAGE_NAME_DINNER}
 docker push eu.gcr.io/${PROJECT_NAME_PRD}/${DOCKER_IMAGE_NAME_AUTH}

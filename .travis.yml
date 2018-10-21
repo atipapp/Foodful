@@ -49,6 +49,8 @@ before_deploy:
   - gcloud --quiet version
   - gcloud --quiet components update
   - gcloud --quiet components update kubectl
+  - gcloud --quiet components install beta
+  - gcloud --quiet auth configure-docker
   
 deploy:
   - provider: script
