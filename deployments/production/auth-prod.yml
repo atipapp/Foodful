@@ -2,21 +2,21 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    deployment.kubernetes.io/revision: "6"
-  creationTimestamp: 2018-10-21T13:05:46Z
-  generation: 9
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: 2018-10-21T15:19:01Z
+  generation: 1
   labels:
-    app: dinner
-  name: dinner
+    app: auth
+  name: auth
   namespace: default
-  resourceVersion: "24880"
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/dinner
-  uid: 064e6b39-d532-11e8-bf47-42010aa60177
+  resourceVersion: "28436"
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/auth
+  uid: a3b8f812-d544-11e8-89fb-42010aa6020d
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: dinner
+      app: auth
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -26,18 +26,18 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app: dinner
+        app: auth
     spec:
       containers:
-        - name: dinner
-          image: eu.gcr.io/foodful-stg/dinner:latest
+        - name: auth
+          image: eu.gcr.io/foodful-prod/auth:latest
           imagePullPolicy: Always
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://localhost:3306/DinnerService?useSSL=false
+              value: jdbc:mysql://localhost:3306/AuthService?useSSL=false
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -48,7 +48,13 @@ spec:
                 secretKeyRef:
                   key: password
                   name: cloudsql-db-credentials
-                  
+          livenessProbe:
+            httpGet:
+                path: /actuator/health
+                port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+                              
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11
           imagePullPolicy: IfNotPresent        
@@ -57,7 +63,7 @@ spec:
           terminationMessagePolicy: File
           command:
             - /cloud_sql_proxy
-            - -instances=foodful-stg:europe-north1:foodful-stg-db=tcp:3306
+            - -instances=foodful-prod:europe-north1:foodful-prod-db=tcp:3306
             - -credential_file=/secrets/cloudsql/credentials.json
           volumeMounts:
           - mountPath: /secrets/cloudsql
