@@ -1,17 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gateway
+  name: gateway-service
+  namespace: default
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30054
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: gateway
+  sessionAffinity: None
+  type: LoadBalancer
+    
+---
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "1"
-  creationTimestamp: 2018-10-21T12:29:39Z
-  generation: 3
   labels:
     app: gateway
   name: gateway
   namespace: default
-  resourceVersion: "15290"
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/gateway
-  uid: fa9dc26f-d52c-11e8-bf47-42010aa60177
 spec:
   replicas: 1
   selector:
@@ -24,7 +38,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: gateway
     spec:
@@ -40,7 +53,7 @@ spec:
                path: /actuator/health
                port: 8080
            initialDelaySeconds: 30
-           periodSeconds: 5
+           periodSeconds: 30
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

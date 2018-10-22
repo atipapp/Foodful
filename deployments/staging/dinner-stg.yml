@@ -1,19 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: dinner
+  name: dinner-service
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: dinner
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "6"
-  creationTimestamp: 2018-10-21T13:05:46Z
-  generation: 9
   labels:
     app: dinner
   name: dinner
   namespace: default
-  resourceVersion: "24880"
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/dinner
-  uid: 064e6b39-d532-11e8-bf47-42010aa60177
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: dinner
@@ -24,7 +36,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: dinner
     spec:
@@ -53,7 +64,7 @@ spec:
                 path: /actuator/health
                 port: 8080
             initialDelaySeconds: 30
-            periodSeconds: 5
+            periodSeconds: 30
                   
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11
