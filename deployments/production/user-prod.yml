@@ -1,19 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: user
+  name: user-service
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: user
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "1"
-  creationTimestamp: 2018-10-21T15:38:55Z
-  generation: 1
   labels:
     app: user
   name: user
   namespace: default
-  resourceVersion: "30495"
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/user
-  uid: 6b67012d-d547-11e8-89fb-42010aa6020d
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: user
@@ -24,7 +36,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: user
     spec:
@@ -53,7 +64,7 @@ spec:
                 path: /actuator/health
                 port: 8080
             initialDelaySeconds: 30
-            periodSeconds: 5
+            periodSeconds: 30
                   
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11

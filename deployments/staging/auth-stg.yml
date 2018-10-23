@@ -1,19 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: auth
+  name: auth-service
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: auth
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "1"
-  creationTimestamp: 2018-10-21T14:25:08Z
-  generation: 1
   labels:
     app: auth
   name: auth
   namespace: default
-  resourceVersion: "26279"
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/auth
-  uid: 1c7e413b-d53d-11e8-bf47-42010aa60177
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: auth
@@ -24,7 +36,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: auth
     spec:
@@ -53,7 +64,7 @@ spec:
                 path: /actuator/health
                 port: 8080
             initialDelaySeconds: 30
-            periodSeconds: 5
+            periodSeconds: 30
                   
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11

@@ -27,13 +27,11 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>io.foodful</groupId>
             <artifactId>auth-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
