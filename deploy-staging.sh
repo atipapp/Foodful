@@ -46,11 +46,10 @@ yes | gcloud beta container images add-tag eu.gcr.io/${PROJECT_NAME_STG}/${DOCKE
 kubectl config view
 kubectl config current-context
 
+kubectl apply -f $PWD/deployments/staging --overwrite=true
+
 kubectl set image deployment/${KUBE_DEPLOYMENT_NAME_DINNER} ${KUBE_DEPLOYMENT_CONTAINER_NAME_DINNER}=eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_DINNER}:$TRAVIS_COMMIT
 kubectl set image deployment/${KUBE_DEPLOYMENT_NAME_AUTH} ${KUBE_DEPLOYMENT_CONTAINER_NAME_AUTH}=eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_AUTH}:$TRAVIS_COMMIT
 kubectl set image deployment/${KUBE_DEPLOYMENT_NAME_GATEWAY} ${KUBE_DEPLOYMENT_CONTAINER_NAME_GATEWAY}=eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_GATEWAY}:$TRAVIS_COMMIT
 kubectl set image deployment/${KUBE_DEPLOYMENT_NAME_USER} ${KUBE_DEPLOYMENT_CONTAINER_NAME_USER}=eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_USER}:$TRAVIS_COMMIT
 kubectl set image deployment/${KUBE_DEPLOYMENT_NAME_FRONTEND} ${KUBE_DEPLOYMENT_CONTAINER_NAME_FRONTEND}=eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_FRONTEND}:$TRAVIS_COMMIT
-
-
-kubectl apply -f $PWD/deployments/staging --overwrite=true
