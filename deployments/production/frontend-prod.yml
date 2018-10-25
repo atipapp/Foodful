@@ -8,7 +8,7 @@ metadata:
 spec:
   externalTrafficPolicy: Cluster
   ports:
-  - nodePort: 30055
+  - nodePort: 32703
     port: 80
     protocol: TCP
     targetPort: 8080
@@ -42,20 +42,15 @@ spec:
         app: frontend
     spec:
       containers:
-        - name: frontend
-          image: eu.gcr.io/foodful-prod/frontend:latest
-          imagePullPolicy: Always
-          resources: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File          
-            
+      - image: eu.gcr.io/foodful-prod/frontend:latest
+        imagePullPolicy: Always
+        name: frontend
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      volumes:
-      - name: cloudsql-instance-credentials
-        secret:
-          defaultMode: 420
-          secretName: cloudsql-instance-credentials
+
