@@ -7,7 +7,7 @@ import io.foodful.dinner.api.dto.DinnerUpdateRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "dinner-service-v1", url = "${foodful.clients.prefix}dinner-service-v1${foodful.clients.postfix}")
+@FeignClient(name = "dinner-service", url = "${foodful.clients.prefix}dinner-service${foodful.clients.postfix}")
 public interface DinnerClient {
 
     @PostMapping("/dinner")
