@@ -26,7 +26,6 @@ const styles = {
 
 function SimpleCard(props) {
     const { classes } = props;
-
     return (
         <Card className={classes.card}>
             <CardContent>

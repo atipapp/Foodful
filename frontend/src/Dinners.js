@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import DinnerCard from "./DinnerCard";
-import { Grid } from "@material-ui/core";
 
 class Dinners extends Component {
   render() {
@@ -8,7 +7,7 @@ class Dinners extends Component {
       <div>
         <h2>Your upcoming dinners</h2>
 
-        <div class="row align-items-center">
+        <div className="row align-items-center">
           {this.renderDinnerCard(this.getMockDinner())}
           {this.renderDinnerCard(this.getMockDinner())}
           {this.renderDinnerCard(this.getMockDinner())}
@@ -19,7 +18,9 @@ class Dinners extends Component {
 
   renderDinnerCard(dinner) {
     return (
-      <DinnerCard value={dinner}/>
+      <DinnerCard
+        value={dinner}
+      />
     );
   }
 

@@ -3,7 +3,7 @@ import SimpleCard from "./SimpleCard";
 
 class DinnerCard extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -13,8 +13,10 @@ class DinnerCard extends Component {
 
   render() {
     return (
-      <div class="col" id="dinnercard">
-        <SimpleCard value={this.state.dinner} />
+      <div className="col">
+        <SimpleCard
+          value={this.state.dinner}
+        />
       </div>
     );
   }
