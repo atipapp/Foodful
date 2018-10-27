@@ -9,20 +9,27 @@ class Dinners extends Component {
         <h2>Your upcoming dinners</h2>
 
         <div class="row align-items-center">
-          {this.renderDinnerCard()}
-          {this.renderDinnerCard()}
-          {this.renderDinnerCard()}
+          {this.renderDinnerCard(this.getMockDinner())}
+          {this.renderDinnerCard(this.getMockDinner())}
+          {this.renderDinnerCard(this.getMockDinner())}
         </div>
       </div>
     );
   }
 
-  renderDinnerCard() {
+  renderDinnerCard(dinner) {
     return (
-
-      <DinnerCard />
-
+      <DinnerCard value={dinner}/>
     );
+  }
+
+  getMockDinner() {
+    return {
+      title: "Ebedeles",
+      location: "Double delight etterem",
+      time: "2018/10/27",
+      createdBy: "Attila"
+    }
   }
 }
 
