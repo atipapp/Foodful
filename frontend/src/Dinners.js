@@ -5,7 +5,7 @@ class Dinners extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dinners: Array(3).fill(this.getMockDinner())
+      dinners: this.getMockDinners()
     };
   }
 
@@ -26,21 +26,42 @@ class Dinners extends Component {
     );
   }
 
+  handleDinnerRSVP(dinner, isAccepted){
+    console.log('Dinner rsvp changed on dinner ' + dinner.id + ' ' + isAccepted);
+  }
+
   renderDinnerCard(dinner) {
     return (
       <DinnerCard
+        key={dinner.id}
         value={dinner}
+        onRSVPClick={this.handleDinnerRSVP}
       />
     );
   }
 
-  getMockDinner() {
-    return {
-      title: "Ebedeles",
+  getMockDinners() {
+    return [{
+      id: "1",
+      title: "Ebedeles1",
       location: "Double delight etterem",
       time: "2018/10/27",
       createdBy: "Attila"
-    }
+    },
+    {
+      id: "2",
+      title: "Ebedeles2",
+      location: "Double delight etterem",
+      time: "2018/10/27",
+      createdBy: "Attila"
+    },
+    {
+      id: "3",
+      title: "Ebedeles3",
+      location: "Double delight etterem",
+      time: "2018/10/27",
+      createdBy: "Attila"
+    }]
   }
 }
 
