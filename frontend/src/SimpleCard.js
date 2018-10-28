@@ -43,7 +43,8 @@ function SimpleCard(props) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Learn More</Button>
+                <Button size="small" onClick={props.acceptedClick}>Accept</Button>
+                <Button size="small" onClick={props.deniedClick}>Deny</Button>
             </CardActions>
         </Card>
     );

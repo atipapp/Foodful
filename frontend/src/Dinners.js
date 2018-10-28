@@ -2,15 +2,25 @@ import React, { Component } from "react";
 import DinnerCard from "./DinnerCard";
 
 class Dinners extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dinners: Array(3).fill(this.getMockDinner())
+    };
+  }
+
+
   render() {
     return (
       <div>
         <h2>Your upcoming dinners</h2>
 
         <div className="row align-items-center">
-          {this.renderDinnerCard(this.getMockDinner())}
-          {this.renderDinnerCard(this.getMockDinner())}
-          {this.renderDinnerCard(this.getMockDinner())}
+          {
+            this.state.dinners.map(
+              (dinner) => this.renderDinnerCard(dinner)
+            )
+          }
         </div>
       </div>
     );
