@@ -11,7 +11,7 @@ spec:
   - nodePort: 32703
     port: 80
     protocol: TCP
-    targetPort: 3000
+    targetPort: 80
   selector:
     app: frontend
   sessionAffinity: None
