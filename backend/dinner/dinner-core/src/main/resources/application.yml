@@ -19,7 +19,7 @@ foodful:
       key: 3jfef4e2e7cb44b2893169cd7c276824
   clients:
     prefix: http://
-    postfix: .internal
+    postfix:
 
 ---
 spring:

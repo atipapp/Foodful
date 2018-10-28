@@ -32,7 +32,7 @@ foodful:
         client-id: INSERT_ID_HERE
   clients:
     prefix: http://
-    postfix: .internal
+    postfix:
 
 ---
 spring:

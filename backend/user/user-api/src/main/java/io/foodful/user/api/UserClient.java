@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "user-service-v1", url = "${foodful.clients.prefix}user-service-v1${foodful.clients.postfix}")
+@FeignClient(name = "user-service", url = "${foodful.clients.prefix}user-service${foodful.clients.postfix}")
 public interface UserClient {
 
     @PutMapping("/user")

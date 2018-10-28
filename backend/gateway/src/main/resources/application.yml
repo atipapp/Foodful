@@ -4,19 +4,19 @@ foodful:
     token-header: Authorization
   clients:
     prefix: http://
-    postfix: .internal
+    postfix:
 
 spring:
   cloud:
     gateway:
       routes:
       - id: dinner_route
-        uri: http://dinner-service-v1.internal
+        uri: http://dinner-service
         predicates:
         - Path=/dinner-service/v1/**
         filters:
         - AuthenticatedRequestFilter
       - id: auth_route
-        uri: http://auth-service-v1.internal
+        uri: http://auth-service
         predicates:
         - Path=/auth-service/v1/**
