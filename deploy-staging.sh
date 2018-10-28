@@ -46,6 +46,8 @@ yes | gcloud beta container images add-tag eu.gcr.io/${PROJECT_NAME_STG}/${DOCKE
 kubectl config view
 kubectl config current-context
 
+kubectl create configmap nginx-configmap --from-file=$PWD/deployments/staging/nginx.conf -o yaml --dry-run > $PWD/deployments/staging/nginx-configmap.yml
+
 kubectl apply -f $PWD/deployments/staging --overwrite=true
 
 kubectl set image deployment/${KUBE_DEPLOYMENT_NAME_DINNER} ${KUBE_DEPLOYMENT_CONTAINER_NAME_DINNER}=eu.gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME_DINNER}:$TRAVIS_COMMIT
