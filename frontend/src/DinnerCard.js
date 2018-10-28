@@ -9,6 +9,13 @@ class DinnerCard extends Component {
     this.state = {
       dinner: props.value,
     };
+
+    this.handleAcceptedClick = () => {
+      this.props.onRSVPClick(this.props.value, true)
+    }
+    this.handleDeniedClick = () => {
+      this.props.onRSVPClick(this.props.value, false)
+    }
   }
 
   render() {
@@ -16,6 +23,9 @@ class DinnerCard extends Component {
       <div className="col">
         <SimpleCard
           value={this.state.dinner}
+          acceptedClick={this.handleAcceptedClick}
+          deniedClick={this.handleDeniedClick}
+          status={this.props.statusForCurrentUser}
         />
       </div>
     );

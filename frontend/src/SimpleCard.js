@@ -30,7 +30,7 @@ function SimpleCard(props) {
         <Card className={classes.card}>
             <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Accepted
+                    {props.status}
                 </Typography>
                 <Typography variant="h5" component="h2">
                     {props.value.title}
@@ -43,7 +43,8 @@ function SimpleCard(props) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Learn More</Button>
+                <Button size="small" onClick={props.acceptedClick}>Accept</Button>
+                <Button size="small" onClick={props.deniedClick}>Deny</Button>
             </CardActions>
         </Card>
     );
