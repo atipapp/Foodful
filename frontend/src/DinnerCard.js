@@ -25,6 +25,7 @@ class DinnerCard extends Component {
           value={this.state.dinner}
           acceptedClick={this.handleAcceptedClick}
           deniedClick={this.handleDeniedClick}
+          status={this.props.statusForCurrentUser}
         />
       </div>
     );

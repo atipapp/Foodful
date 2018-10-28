@@ -30,7 +30,7 @@ function SimpleCard(props) {
         <Card className={classes.card}>
             <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Accepted
+                    {props.status}
                 </Typography>
                 <Typography variant="h5" component="h2">
                     {props.value.title}
