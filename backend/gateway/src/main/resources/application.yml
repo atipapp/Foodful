@@ -16,7 +16,9 @@ spring:
         - Path=/dinner-service/v1/**
         filters:
         - AuthenticatedRequestFilter
+        - RewritePath=/dinner-service/v1/(?<segment>.*), /$\{segment}
       - id: auth_route
         uri: http://auth-service
         predicates:
         - Path=/auth-service/v1/**
+        - RewritePath=/auth-service/v1/(?<segment>.*), /$\{segment}
