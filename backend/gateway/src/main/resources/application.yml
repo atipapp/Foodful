@@ -10,6 +10,7 @@ spring:
   cloud:
     gateway:
       routes:
+
       - id: dinner_route
         uri: http://dinner-service
         predicates:
@@ -17,8 +18,10 @@ spring:
         filters:
         - AuthenticatedRequestFilter
         - RewritePath=/dinner-service/v1/(?<segment>.*), /$\{segment}
+
       - id: auth_route
         uri: http://auth-service
         predicates:
         - Path=/auth-service/v1/**
+        filters:
         - RewritePath=/auth-service/v1/(?<segment>.*), /$\{segment}
