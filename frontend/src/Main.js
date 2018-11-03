@@ -35,10 +35,11 @@ class Main extends Component {
     }
 
     isLoggedIn(){
-        return false;
+        return sessionStorage.getItem('refresh_token') !== null;
     }
 
     renderLoggedOutContent(){
+        console.log('Render logged out content')
         return(
             <div>
                 <a 
@@ -54,6 +55,7 @@ class Main extends Component {
     }
 
     renderLoggedInContent(){
+        console.log('Render logged in content')
         return(
             <div>
                 <Route exact path="/" component={Dinners} />
