@@ -40,6 +40,8 @@ class Login extends Component {
                     this.setState({
                         loggedIn: true,
                     })
+
+                    window.location.reload();
                 },
                 (error) => {
                     this.setState({
@@ -69,6 +71,7 @@ class Login extends Component {
     redirect(){
         return(
             <div>
+                Login successful. Please refresh.
                 <Redirect push to="/" />
             </div>
         )
