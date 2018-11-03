@@ -48,7 +48,6 @@ public class LoginService {
         this.facebookClientId = facebookClientId;
         this.facebookClientSecret = facebookClientSecret;
 
-        log.info("Facebook client secret is set to {} ", facebookClientSecret);
         log.info("Facebook client id is set to {}", facebookClientId);
     }
 

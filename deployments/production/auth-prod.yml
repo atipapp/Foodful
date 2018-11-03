@@ -59,15 +59,15 @@ spec:
                 secretKeyRef:
                   key: password
                   name: cloudsql-db-credentials
-            - name: FOODFUL_SOCIAL_AUTH_FACEBOOK_CLIENT_SECRET
+            - name: FOODFUL_AUTH_SOCIAL_FACEBOOK_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  key: client-secret
+                  key: secret
                   name: fb-api-credentials
-            - name: FOODFUL_SOCIAL_AUTH_FACEBOOK_CLIENT_ID
+            - name: FOODFUL_AUTH_SOCIAL_FACEBOOK_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  key: client-id
+                  key: id
                   name: fb-api-credentials
           livenessProbe:
             httpGet:
