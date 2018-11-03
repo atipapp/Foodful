@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import { Route, Redirect } from 'react-router-dom'
-import Dinners from "./Dinners";
-import Profile from "./Profile";
-import Contact from "./Contact";
 
 class Login extends Component {
     constructor(props) {
