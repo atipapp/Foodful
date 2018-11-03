@@ -8,6 +8,7 @@ import Dinners from "./Dinners";
 import Profile from "./Profile";
 import Contact from "./Contact";
 import Login from "./Login";
+import Create from "./Create"
 
 class Main extends Component {
 
@@ -19,6 +20,7 @@ class Main extends Component {
                     <h5>Thoughtful dinner planning</h5>
                     <ul className="header">
                         <li><NavLink exact to="/">Dinners</NavLink></li>
+                        <li><NavLink to="/create">Create a dinner</NavLink></li>
                         <li><NavLink to="/profile">My profile</NavLink></li>
                         <li><NavLink to="/contact">Contact</NavLink></li>
                     </ul>
@@ -59,6 +61,7 @@ class Main extends Component {
         return(
             <div>
                 <Route exact path="/" component={Dinners} />
+                <Route path="/create" component={Create} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/contact" component={Contact} />
                 <Route path="/login" component={Login} />
