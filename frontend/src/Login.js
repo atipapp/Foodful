@@ -1,16 +1,20 @@
 import React, { Component } from "react";
+import { Route, Redirect } from 'react-router-dom'
+import Dinners from "./Dinners";
+import Profile from "./Profile";
+import Contact from "./Contact";
 
 class Login extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
+            loggedIn: false,
             facebookCode: props.location.search.replace("?code=", "")
         }
         this.loginWithApi();
     }
 
-    loginWithApi(){
+    loginWithApi() {
         fetch('http://staging.foodful.io/api/auth-service/v1/oauth/login/social', {
             method: 'POST',
             headers: {
@@ -23,27 +27,51 @@ class Login extends Component {
                 provider: 'FACEBOOK'
             })
         })
-        .then(res => res.json())
-        .then(
-          (result) => {
-            console.log(result);
-          },
-          (error) => {
-            this.setState({
-              isLoaded: true,
-              error
-            });
-          }
-        )
+            .then(res => res.json())
+            .then(
+                (result) => {
+
+                    console.log(result);
+                    sessionStorage.setItem('access_token', result.access_token);
+                    sessionStorage.setItem('access_token_expires', result.access_token_expires);
+                    sessionStorage.setItem('refresh_token', result.refresh_token);
+                    sessionStorage.setItem('refresh_token_expires', result.refresh_token_expires);
+
+                    this.setState({
+                        loggedIn: true,
+                    })
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
     }
 
     render() {
         return (
             <div>
-                <text>Facebook login data: {this.state.facebookCode}</text>
+                {this.state.loggedIn ? this.redirect() : this.renderWait()}
             </div>
-
         );
+    }
+
+    renderWait(){
+        return(
+            <div>
+                Logging you in. Please wait.
+            </div>
+        )
+    }
+
+    redirect(){
+        return(
+            <div>
+                <Redirect push to="/" />
+            </div>
+        )
     }
 }
 
