@@ -28,8 +28,9 @@ foodful:
     social:
       facebook:
         url: https://graph.facebook.com
-        client-secret: INSERT_SECRET_HERE
-        client-id: INSERT_ID_HERE
+        client:
+          secret: INSERT_SECRET_HERE
+          id: INSERT_ID_HERE
   clients:
     prefix: http://
     postfix:

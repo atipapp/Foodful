@@ -40,8 +40,8 @@ public class LoginService {
     public LoginService(TokenService tokenService,
                         FacebookClient facebookClient,
                         UserClient userClient,
-                        @Value("${foodful.auth.social.facebook.client-secret}") String facebookClientSecret,
-                        @Value("${foodful.auth.social.facebook.client-id}") String facebookClientId) {
+                        @Value("${foodful.auth.social.facebook.client.secret}") String facebookClientSecret,
+                        @Value("${foodful.auth.social.facebook.client.id}") String facebookClientId) {
         this.tokenService = tokenService;
         this.facebookClient = facebookClient;
         this.userClient = userClient;
