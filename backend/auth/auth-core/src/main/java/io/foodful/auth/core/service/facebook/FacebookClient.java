@@ -15,7 +15,7 @@ public interface FacebookClient {
                                                @RequestParam("client_secret") String clientSecret,
                                                @RequestParam("code") String code);
 
-    @RequestMapping(value = "/me?fields=first_name,last_name,email", method = RequestMethod.GET)
+    @RequestMapping(value = "/v3.1/me?fields=first_name,last_name,email", method = RequestMethod.GET)
     FacebookUserResponse getUserData(@RequestHeader("Authorization") String authorizationHeader, @RequestParam("appsecret_proof") String appSecretProof);
 
 }

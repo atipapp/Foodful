@@ -27,7 +27,7 @@ foodful:
       cleanup-frequency-in-minutes: 10
     social:
       facebook:
-        url: https://graph.facebook.com/v3.1
+        url: https://graph.facebook.com
         client-secret: INSERT_SECRET_HERE
         client-id: INSERT_ID_HERE
   clients:
