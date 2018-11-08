@@ -14,15 +14,15 @@ public interface DinnerClient {
     DinnerResponse createDinner(@RequestBody DinnerCreateRequest request);
 
     @GetMapping("/dinner/{dinnerId}")
-    DinnerResponse getDinner(@PathVariable String dinnerId);
+    DinnerResponse getDinner(@PathVariable("dinnerId") String dinnerId);
 
     @PutMapping("/dinner/{dinnerId}")
-    DinnerResponse updateDinner(@PathVariable String dinnerId, @RequestBody DinnerUpdateRequest request);
+    DinnerResponse updateDinner(@PathVariable("dinnerId") String dinnerId, @RequestBody DinnerUpdateRequest request);
 
     @DeleteMapping("/dinner/{dinnerId}")
-    void deleteDinner(@PathVariable String dinnerId);
+    void deleteDinner(@PathVariable("dinnerId") String dinnerId);
 
     @PostMapping("/dinner/{dinnerId}/invite")
-    DinnerResponse inviteToDinner(@PathVariable String dinnerId, @RequestBody DinnerInviteRequest request);
+    DinnerResponse inviteToDinner(@PathVariable("dinnerId") String dinnerId, @RequestBody DinnerInviteRequest request);
 
 }

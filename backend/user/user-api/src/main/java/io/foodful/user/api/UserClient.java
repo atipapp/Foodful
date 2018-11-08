@@ -15,6 +15,6 @@ public interface UserClient {
     UserResponse createOrUpdateUser(@RequestBody UserRequest request);
 
     @GetMapping("/user/{userId}")
-    UserResponse getUser(@PathVariable String userId);
+    UserResponse getUser(@PathVariable("userId") String userId);
 
 }
