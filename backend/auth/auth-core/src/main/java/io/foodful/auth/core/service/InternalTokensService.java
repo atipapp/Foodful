@@ -4,6 +4,7 @@ import io.foodful.user.api.UserClient;
 import io.foodful.user.api.dto.UserResponse;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class InternalTokensService {
 
     private UserClient userClient;
@@ -23,6 +25,7 @@ public class InternalTokensService {
     }
 
     public String createJwtForUser(String userId) {
+        log.info("Creating internal jwt for user: {}", userId);
         UserResponse profile = userClient.getUser(userId);
 
         return Jwts.builder()

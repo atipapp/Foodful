@@ -5,6 +5,7 @@ import io.foodful.auth.api.dto.InternalJwtCreationRequest;
 import io.foodful.auth.api.dto.InternalJwtCreationResponse;
 import io.foodful.auth.api.dto.TokenValidationRequest;
 import io.foodful.auth.api.dto.TokenValidationResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory;
@@ -18,6 +19,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class AuthenticatedRequestFilter implements GatewayFilterFactory {
 
     private String tokenHeaderName;
@@ -67,6 +69,7 @@ public class AuthenticatedRequestFilter implements GatewayFilterFactory {
     }
 
     private Mono<ServerHttpRequest> putInternalJwtOnRequest(ServerHttpRequest request, String userId) {
+        log.info("Putting internal jwt on request for user: {}", userId);
         InternalJwtCreationRequest internalJwtCreationRequest = InternalJwtCreationRequest.builder().userId(userId).build();
         Mono<InternalJwtCreationResponse> response =
                 Mono.fromCallable(() -> this.authClient.createInternalJwt(internalJwtCreationRequest));
