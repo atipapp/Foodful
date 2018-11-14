@@ -63,7 +63,7 @@ public class DinnerServiceIT {
         assertEquals(request.title, response.title);
         assertEquals(request.location, response.location);
         assertEquals(request.scheduledTime, response.scheduledTime);
-        assertTrue(request.guests.stream().anyMatch(guest -> response.guests.containsKey(guest)));
+        assertTrue(request.guests.stream().allMatch(guest -> response.guests.containsKey(guest)));
         assertEquals(userId, response.createdBy);
     }
 
