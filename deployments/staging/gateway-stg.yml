@@ -42,7 +42,7 @@ spec:
         app: gateway
     spec:
       containers:
-      - image: eu.gcr.io/foodful-stg/gateway:latest
+      - image: eu.gcr.io/foodful-staging/gateway:latest
         imagePullPolicy: Always
         name: gateway
         resources: {}

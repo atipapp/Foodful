@@ -46,7 +46,7 @@ spec:
         configMap:
           name: nginx-configmap
       containers:
-      - image: eu.gcr.io/foodful-stg/frontend:latest
+      - image: eu.gcr.io/foodful-staging/frontend:latest
         imagePullPolicy: Always
         name: frontend
         resources: {}

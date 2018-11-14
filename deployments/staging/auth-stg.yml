@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: eu.gcr.io/foodful-stg/auth:latest
+          image: eu.gcr.io/foodful-staging/auth:latest
           imagePullPolicy: Always
           resources: {}
           terminationMessagePath: /dev/termination-log
@@ -84,7 +84,7 @@ spec:
           terminationMessagePolicy: File
           command:
             - /cloud_sql_proxy
-            - -instances=foodful-stg:europe-north1:foodful-stg-db=tcp:3306
+            - -instances=foodful-staging:europe-west3:foodful-staging=tcp:3306
             - -credential_file=/secrets/cloudsql/credentials.json
           volumeMounts:
           - mountPath: /secrets/cloudsql
