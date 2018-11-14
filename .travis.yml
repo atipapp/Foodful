@@ -20,11 +20,11 @@ cache:
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
-    - PROJECT_NAME_STG=foodful-stg
-    - CLUSTER_NAME_STG=foodful-stg
+    - PROJECT_NAME_STG=foodful-staging
+    - CLUSTER_NAME_STG=standard-cluster-1
     - PROJECT_NAME_PRD=foodful-prod
     - CLUSTER_NAME_PRD=foodful-prod
-    - CLOUDSDK_COMPUTE_ZONE=europe-north1-a    
+    - CLOUDSDK_COMPUTE_ZONE=europe-west3-a
     - DOCKER_IMAGE_NAME_DINNER=dinner
     - DOCKER_IMAGE_NAME_AUTH=auth
     - DOCKER_IMAGE_NAME_GATEWAY=gateway
