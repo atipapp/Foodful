@@ -25,3 +25,8 @@ spring:
         - Path=/auth-service/v1/**
         filters:
         - RewritePath=/auth-service/v1/(?<segment>.*), /$\{segment}
+
+      - id: loader_io_route
+        uri: https://00e9e64bac84b75d71ffefe6d7c070d4ed2fc992aa7fcfce11-apidata.googleusercontent.com/download/storage/v1/b/foodful-loader-io-files/o/loaderio-96714521cae5f56f15a937c482aef0bb.txt?qk=AD5uMEupi2Jrou4eWOTiOJZtYAD60feoK6Zu1RxV10YwkL_or71SfI5xgT_tU0bGz5Yvd_nz7CytY9O6Hfe8qk_hgMV2h2G-bgbWzI4__K3D13J9VM2WfYyxEIYMTMROY65D9NfTDTLUC1cq65fSSz2Wj0Dck6YbKRV3qcKIlkCwqC6KDUkum7DPg37B2TleBKl_gc1LAh1t8PXvarLRPRul2ez7nTc1mATDcI1quEELr_XyDi3fVT0RwkSuZxcd7lu1C7JztQMVSums6oSc773esjCp0iRvzgYVuOQC3pFhKB7zTANX1OkjafadS9OTk5LW2UUZYJg1XctHfWIbTq05WsI9C3NJRMANQghArZmBkA51yHRCODdlZSQMXobrYVjC5rjdI9nW2KQFaE-mGN2JQ6k5y30q5f6QEz-pBONkp18dDV5ZztiCjepwIFjdUwGEaKM4cFmuRxARLC3RCNOm3mzZMzDD_RIII4tL_Zl5fc0f_20g5s8gV2Y2vLajARuL4yYwIJ5FrVtkt8rfY4-_4QMzhIHTj1s9Zuv4FAE4T-Mf0F6Zyrerb8mYfHbeDJpoAyZMd_xm_H6Ze9dxu0zoofu6BRU9rHVGJ6b9Rw_MRE4IsKcP9oWx43I0y49JdkJbWeZtEykZqC1QOoitKPgUI_N_ILLPAN0oV0RQK5jFQTYBc5kVvXpDaSLF96ciocW1LdXNeLgtcB9kGSEXgaNOY1M6b39ND76v2KHbTtBg5WyS82_0qZaDrW_YhynXnB3jxk29QGj_AODVx_JNy5SuCiZ7Jdiz4Njva_eVMRc_9e8XQBJ1ngw7SfqZqL_LPY8rFwhrq6af
+        predicates:
+        - Path=/loaderio-96714521cae5f56f15a937c482aef0bb/**
